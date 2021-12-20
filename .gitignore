@@ -1,0 +1,7 @@
+# compiled output
+/marketplace/bin
+/marketplace/obj
+/marketplace/appsettings.json
+
+# IDE - VSCode
+.vs
