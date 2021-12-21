@@ -23,9 +23,9 @@ namespace marketplace.Repositories
         IEnumerable<TDto> GetAll<TDto, TMapperProfile>() where TMapperProfile : Profile, new();
         TDto Get<TDto, TMapperProfile>(int id) where TMapperProfile : Profile, new();
         TEntity Add<TDto, TMapperProfile>(TDto entity) where TMapperProfile : Profile, new();
-        void Update<TDto, TMapperProfile>(TDto entidad) where TMapperProfile : Profile, new()
+        TEntity Update<TDto, TMapperProfile>(TDto entidad) where TMapperProfile : Profile, new()
         {
-            Update(Mapeador.Map<TDto, TEntity, TMapperProfile>(entidad));
+            return Update(Mapeador.Map<TDto, TEntity, TMapperProfile>(entidad));
         }
         #endregion
     }

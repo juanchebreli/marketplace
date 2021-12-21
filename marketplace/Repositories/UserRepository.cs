@@ -13,6 +13,8 @@ namespace marketplace.Repositories
 
         User GetByEmail(string email);
 
+        List<User> GetAll();
+
     }
     public class UserRepository : GenericRepository<User, AppDbContext>, IUserRepository
     {
@@ -52,6 +54,12 @@ namespace marketplace.Repositories
         public User GetByEmail(string email)
         {
             return AsNoTracking().FirstOrDefault(c => c.email == email && c.deleted == false);
+        }
+
+        public List<User> GetAll()
+        {
+            List<User> users = AppDbContext.Users.Where(user => user.deleted == false).OrderBy(user => user.name).ToList();
+            return users;
         }
     }
 }

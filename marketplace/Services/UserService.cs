@@ -9,12 +9,14 @@ namespace marketplace.Services
     public interface IUserService
     {
 		UserLoginDTO AuthenticateUser<TMapperProfile>(LoginDTO loginCredentials) where TMapperProfile : Profile, new();
-		IEnumerable<User> GetAll();
+		List<User> GetAll();
 		User Get(int id);
-		User Add(User entity);
+		User Add(UserCreateDTO entity);
+		User Update(UserUpdateDTO entity);
 		User Update(User entity);
-		List<string> Validaciones(string email, int id, string username, string dni);
+		List<string> Validaciones(string email, int id, string username);
 		User GetByEmail(string email);
+		void Delete(int id);
 	}
 
 	public class UserService : IUserService
@@ -33,9 +35,9 @@ namespace marketplace.Services
 			return Mapeador.Map<User, UserLoginDTO, TMapperProfile>(_userRepository.AuthenticateUser(loginCredentials));
         }
 
-		public IEnumerable<User> GetAll()
+		public List<User> GetAll()
 		{
-			return _userRepository.All();
+			return _userRepository.GetAll();
 		}
 
 		public User Get(int id)
@@ -43,17 +45,22 @@ namespace marketplace.Services
 			return _userRepository.Get(id);
 		}
 
-		public User Add(User entity)
+		public User Add(UserCreateDTO entity)
 		{
-			return _userRepository.Add(entity);
+			entity.deleted = false;
+			return _userRepository.Add<UserCreateDTO, UserCreateDTO.MapperProfile>(entity);
+		}
+
+		public User Update(UserUpdateDTO entity)
+		{
+			return _userRepository.Update<UserUpdateDTO, UserUpdateDTO.MapperProfile>(entity);
 		}
 
 		public User Update(User entity)
 		{
 			return _userRepository.Update(entity);
 		}
-
-		public List<string> Validaciones(string email, int id, string username, string dni)
+		public List<string> Validaciones(string email, int id, string username)
 		{
 			List<string> errors = new List<string>();
 			if (!_userRepository.FreeEmail(email, id))
@@ -66,6 +73,13 @@ namespace marketplace.Services
 		public User GetByEmail(string email)
         {
 			return _userRepository.GetByEmail(email);
+        }
+
+		public void Delete(int id)
+        {
+			User user = _userRepository.Get(id);
+			user.deleted = true;
+			_userRepository.Update(user);
         }
 	}
 }
