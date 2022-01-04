@@ -1,6 +1,7 @@
 ﻿using API.MappingConfiguration;
 using AutoMapper;
 using marketplace.DTO.UserDTO;
+using marketplace.Helpers;
 using marketplace.Models;
 using marketplace.Repositories;
 
@@ -22,11 +23,13 @@ namespace marketplace.Services
 	public class UserService : IUserService
 	{
 		private readonly IUserRepository _userRepository;
+		private readonly IConfiguration _configuration;
 
-		public UserService(IUserRepository userRepository)
+		public UserService(IUserRepository userRepository, IConfiguration configuration)
 		{
 
 			_userRepository = userRepository;
+			_configuration = configuration;
 
 		}
 
@@ -47,7 +50,9 @@ namespace marketplace.Services
 
 		public User Add(UserCreateDTO entity)
 		{
+			string key = _configuration.GetSection("Encrypt")["Key"];
 			entity.deleted = false;
+			entity.password = CryptoEngine.Encrypt(entity.password, key);
 			return _userRepository.Add<UserCreateDTO, UserCreateDTO.MapperProfile>(entity);
 		}
 

@@ -1,5 +1,6 @@
 ﻿using marketplace.Context;
 using marketplace.DTO.UserDTO;
+using marketplace.Helpers;
 using marketplace.Models;
 
 namespace marketplace.Repositories
@@ -19,17 +20,27 @@ namespace marketplace.Repositories
     public class UserRepository : GenericRepository<User, AppDbContext>, IUserRepository
     {
         readonly AppDbContext AppDbContext;
+		private readonly IConfiguration _configuration;
 
-        public UserRepository(AppDbContext dbContext): base(dbContext)
+		public UserRepository(AppDbContext dbContext, IConfiguration configuration) : base(dbContext)
         {
             AppDbContext = dbContext;
-;
+			_configuration = configuration;
         }
 
         public User AuthenticateUser(LoginDTO loginCredentials)
         {
-            User user = AppDbContext.Users.FirstOrDefault(x => x.username == loginCredentials.username && x.password == loginCredentials.password);
-            return user;
+			string key = _configuration.GetSection("Encrypt")["Key"];
+			User user = AppDbContext.Users.FirstOrDefault(x => x.username == loginCredentials.username);
+			if (user != null)
+			{
+				string passwordDecrypt = CryptoEngine.Decrypt(user.password,key);
+				if(passwordDecrypt == loginCredentials.password)
+				{
+					return user;
+				}
+			}
+            return null;
         }
 
         public bool FreeUsername(string usuario, int id)
