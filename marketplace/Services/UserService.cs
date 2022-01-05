@@ -15,7 +15,7 @@ namespace marketplace.Services
 		User Add(UserCreateDTO entity);
 		User Update(UserUpdateDTO entity);
 		User Update(User entity);
-		List<string> Validaciones(string email, int id, string username);
+		List<string> Validations(string email, int id, string username);
 		User GetByEmail(string email);
 		void Delete(int id);
 	}
@@ -65,13 +65,13 @@ namespace marketplace.Services
 		{
 			return _userRepository.Update(entity);
 		}
-		public List<string> Validaciones(string email, int id, string username)
+		public List<string> Validations(string email, int id, string username)
 		{
 			List<string> errors = new List<string>();
 			if (!_userRepository.FreeEmail(email, id))
-				errors.Add("Ese email ya esta utilizado por otro usuario");
+				errors.Add("That email is already being used by another user");
 			if (!_userRepository.FreeUsername(username, id))
-				errors.Add("Ese nombre de usuario ya esta utilizado por otro usuario");
+				errors.Add("That username is already being used by another user");
 			return errors;
 		}
 

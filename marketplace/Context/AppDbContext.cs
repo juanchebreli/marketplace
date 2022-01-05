@@ -17,8 +17,11 @@ namespace marketplace.Context
         }
 
         public DbSet<User> Users { get; set; }
+		public DbSet<Product> Products { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+		public DbSet<ProductOnSale> ProductsOnSale { get; set; }
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             OnModelCreatingPartial(modelBuilder);
 
@@ -26,7 +29,17 @@ namespace marketplace.Context
             {
                 entity.HasKey(e => e.id);
             });
-        }
+
+			modelBuilder.Entity<Product>(entity =>
+			{
+				entity.HasKey(e => e.id);
+			});
+
+			modelBuilder.Entity<ProductOnSale>(entity =>
+			{
+				entity.HasKey(e => e.id);
+			});
+		}
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }

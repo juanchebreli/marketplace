@@ -6,7 +6,6 @@ namespace marketplace.DTO.UserDTO
 {
     public class UserCreateDTO
     {
-        public int id { get; set; }
         [Required]
         public string username { get; set; }
 
@@ -22,8 +21,6 @@ namespace marketplace.DTO.UserDTO
         [Required]
         public string email { get; set; }
 
-        [Required]
-        public string role { get; set; }
         public bool deleted { get; set; }
 
         public class MapperProfile : Profile

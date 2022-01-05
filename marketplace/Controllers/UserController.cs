@@ -67,7 +67,7 @@ namespace marketplace.Controllers
                 {
                     return BadRequest("Invalid data.");
                 }
-                List<string> errors = _userService.Validaciones(entity.email, entity.id, entity.username);
+                List<string> errors = _userService.Validations(entity.email, 0, entity.username);
                 if (!errors.Any())
                 {
                     User user = _userService.Add(entity);
@@ -100,7 +100,7 @@ namespace marketplace.Controllers
                     return BadRequest("Invalid data.");
                 }
 
-                List<string> errors = _userService.Validaciones(entity.email, entity.id, entity.username);
+                List<string> errors = _userService.Validations(entity.email, entity.id, entity.username);
                 if (!errors.Any())
                 {
                     _userService.Update(entity);

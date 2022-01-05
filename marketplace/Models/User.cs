@@ -21,9 +21,6 @@ namespace marketplace.Models
         public string email { get; set; }
 
         [Required]
-        public bool deleted { get; set; }
-
-        [Required]
         public string role { get; set; }
         // Admin, User, Mod
     }
