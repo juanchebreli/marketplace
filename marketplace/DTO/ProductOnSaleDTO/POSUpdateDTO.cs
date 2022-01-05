@@ -2,16 +2,18 @@
 using marketplace.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace marketplace.DTO.ProductDTO
+namespace marketplace.DTO.ProductOnSaleDTO
 {
-	public class ProductUpdateDTO
+	public class ProductOnSaleUpdateDTO
 	{
 		[Required]
 		public int id { get; set; }
 		[Required]
-		public string name { get; set; }
+		public decimal price { get; set; }
 
 		[Required]
+		public bool offer { get; set; }
+
 		public bool deleted { get; set; }
 
 		public class MapperProfile : Profile
@@ -22,7 +24,7 @@ namespace marketplace.DTO.ProductDTO
 			}
 			public static void configure(Profile perfil)
 			{
-				perfil.CreateMap<Product, ProductUpdateDTO>()
+				perfil.CreateMap<ProductOnSale, ProductOnSaleUpdateDTO>()
 					.ReverseMap();
 			}
 		}

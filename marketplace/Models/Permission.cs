@@ -3,11 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace marketplace.Models
 {
-	public class Product : Entity<int>
+	public class Permission : Entity<int>
 	{
 		[Required]
 		public string name { get; set; }
 
-		public virtual ICollection<ProductOnSale> ProductOnSales { get; set; }
+		public virtual ICollection<Role> Roles { get; set; }
+
 	}
 }

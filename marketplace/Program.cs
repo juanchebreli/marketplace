@@ -58,6 +58,7 @@ builder.Services.AddAuthentication(x =>
 // configure DI for application services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductOnSaleService, ProductOnSaleService>();
 
 // connect to db
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("ConnectionString")));
@@ -67,6 +68,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 // configure DI for application repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductOnSaleRepository, ProductOnSaleRepository>();
 
 var app = builder.Build();
 

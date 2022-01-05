@@ -21,7 +21,12 @@ namespace marketplace.Models
         public string email { get; set; }
 
         [Required]
-        public string role { get; set; }
-        // Admin, User, Mod
-    }
+		public int Roleid { get; set; }
+
+		public virtual Role Role { get; set; }
+
+		public virtual ICollection<ProductOnSale> ProductOnSales { get; set; }
+
+		public virtual ICollection<Purchase> Purchases { get; set; }
+	}
 }
