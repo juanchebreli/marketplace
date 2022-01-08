@@ -111,9 +111,8 @@ namespace marketplace.Migrations
                     b.Property<decimal>("price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("stateName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("state")
+                        .HasColumnType("int");
 
                     b.HasKey("id");
 
@@ -181,6 +180,22 @@ namespace marketplace.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("marketplace.Models.State", b =>
+                {
+                    b.Property<int>("id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("state")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("States");
+
+                    b.HasDiscriminator<string>("state").HasValue("State");
                 });
 
             modelBuilder.Entity("marketplace.Models.User", b =>
@@ -259,6 +274,27 @@ namespace marketplace.Migrations
                     b.HasBaseType("marketplace.Models.PaymentMethod");
 
                     b.HasDiscriminator().HasValue("cash_method");
+                });
+
+            modelBuilder.Entity("marketplace.Models.Free", b =>
+                {
+                    b.HasBaseType("marketplace.Models.State");
+
+                    b.HasDiscriminator().HasValue("FREE");
+                });
+
+            modelBuilder.Entity("marketplace.Models.Reserved", b =>
+                {
+                    b.HasBaseType("marketplace.Models.State");
+
+                    b.HasDiscriminator().HasValue("RESERVED");
+                });
+
+            modelBuilder.Entity("marketplace.Models.SoldOut", b =>
+                {
+                    b.HasBaseType("marketplace.Models.State");
+
+                    b.HasDiscriminator().HasValue("SOLDOUT");
                 });
 
             modelBuilder.Entity("marketplace.Models.ProductOnSale", b =>

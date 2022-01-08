@@ -57,7 +57,7 @@ namespace marketplace.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin,Mod")]
+		[AllowAnonymous]
         [HttpPost("create")]
         public IActionResult Crear([FromBody] UserCreateDTO entity)
         {

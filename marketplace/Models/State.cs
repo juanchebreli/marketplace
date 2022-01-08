@@ -1,7 +1,11 @@
-﻿namespace marketplace.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace marketplace.Models
 {
 	public abstract class State
 	{
+		[DatabaseGenerated(DatabaseGeneratedOption.None)]
+		public int id { get; set; }
 		public abstract bool canBeShown();
 		public abstract bool canBeFree();
 
@@ -13,5 +17,9 @@
 		public abstract void DoSoldOut(ProductOnSale entity);
 
 		public abstract void DoReserved(ProductOnSale entity);
+
+		public static Free FREE { get; } = new Free() { id = 1 };
+		public static Reserved RESERVED { get; } = new Reserved() { id = 2 };
+		public static SoldOut SOLDOUT { get; } = new SoldOut() { id = 3};
 	}
 }

@@ -1,4 +1,4 @@
-﻿using API.MappingConfiguration;
+﻿using marketplace.MappingConfiguration;
 using AutoMapper;
 using marketplace.DTO.UserDTO;
 using marketplace.Helpers;
@@ -35,7 +35,7 @@ namespace marketplace.Services
 
 		public UserLoginDTO AuthenticateUser<TMapperProfile>(LoginDTO loginCredentials) where TMapperProfile : Profile, new()
 		{
-			return Mapeador.Map<User, UserLoginDTO, TMapperProfile>(_userRepository.AuthenticateUser(loginCredentials));
+			return CustomMapper.Map<User, UserLoginDTO, TMapperProfile>(_userRepository.AuthenticateUser(loginCredentials));
         }
 
 		public List<User> GetAll()

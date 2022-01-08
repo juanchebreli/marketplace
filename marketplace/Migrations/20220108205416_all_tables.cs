@@ -69,6 +69,18 @@ namespace marketplace.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "States",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false),
+                    state = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_States", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PermissionRole",
                 columns: table => new
                 {
@@ -124,10 +136,10 @@ namespace marketplace.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    stateName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     offer = table.Column<bool>(type: "bit", nullable: false),
                     Userid = table.Column<int>(type: "int", nullable: false),
                     Productid = table.Column<int>(type: "int", nullable: false),
+                    state = table.Column<int>(type: "int", nullable: false),
                     deleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -228,6 +240,9 @@ namespace marketplace.Migrations
 
             migrationBuilder.DropTable(
                 name: "Purchases");
+
+            migrationBuilder.DropTable(
+                name: "States");
 
             migrationBuilder.DropTable(
                 name: "Permissions");

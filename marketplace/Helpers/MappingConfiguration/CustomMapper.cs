@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace API.MappingConfiguration
+namespace marketplace.MappingConfiguration
 {
-    public class Mapeador
+    public class CustomMapper
     {
         public static MapperConfiguration getMapper<TMapperProfile>() where TMapperProfile : Profile, new()
         {

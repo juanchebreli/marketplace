@@ -1,7 +1,6 @@
-﻿using Api.Models;
-
-namespace marketplace.Models
+﻿namespace marketplace.Models
 {
+	// TPH hierarchy
 	public abstract class PaymentMethod : Entity<int>
 	{
 		public string description { get; set; }

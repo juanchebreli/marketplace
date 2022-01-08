@@ -1,4 +1,4 @@
-﻿using API.MappingConfiguration;
+﻿using marketplace.MappingConfiguration;
 using AutoMapper;
 using marketplace.DTO.ProductDTO;
 using marketplace.Helpers;

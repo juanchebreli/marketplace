@@ -55,13 +55,14 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+// connect to db
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("ConnectionString")));
+
 // configure DI for application services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductOnSaleService, ProductOnSaleService>();
-
-// connect to db
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("ConnectionString")));
+builder.Services.AddScoped<ICashMethodService, CashMethodService>();
 
 
 
@@ -69,8 +70,27 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductOnSaleRepository, ProductOnSaleRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+
+//seed
+builder.Services.AddTransient<DataSeeder>();
 
 var app = builder.Build();
+
+if (args.Length == 1 && args[0].ToLower() == "seeddata")
+	SeedData(app);
+
+//Seed Data
+void SeedData(IHost app)
+{
+	var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+
+	using (var scope = scopedFactory.CreateScope())
+	{
+		var service = scope.ServiceProvider.GetService<DataSeeder>();
+		service.SeedStates();
+	}
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -1,5 +1,4 @@
-﻿using Api.Models;
-using marketplace.Helpers;
+﻿using marketplace.Helpers;
 using System.ComponentModel.DataAnnotations;
 
 namespace marketplace.Models
@@ -8,9 +7,6 @@ namespace marketplace.Models
 	{
 		[Required]
 		public decimal price { get; set; }
-
-		[Required]
-		public string stateName { get; set; }
 
 		[Required]
 		public bool offer { get; set; }
@@ -27,10 +23,8 @@ namespace marketplace.Models
 
 		public virtual Purchase Purchase { get; set; }
 
-		public State GetState()
-		{
-			return StateFactory.GetState(this.stateName);
-		}
+		public int state { get; set; }
+
 
 	}
 }

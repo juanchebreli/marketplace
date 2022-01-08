@@ -25,14 +25,14 @@
 
 		public override void DoFree(ProductOnSale entity)
 		{
-			entity.stateName = typeof(Free).Name;
+
 		}
 
 		public override void DoReserved(ProductOnSale entity) { }
 
 		public override void DoSoldOut(ProductOnSale entity)
 		{
-			entity.stateName = typeof(SoldOut).Name;
+
 		}
 	}
 }

@@ -1,11 +1,11 @@
-﻿using API.MappingConfiguration;
-using AutoMapper;
+﻿using marketplace.MappingConfiguration;
 using DelegateDecompiler;
 using System;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using AutoMapper;
 
 namespace marketplace.Repositories
 {
@@ -25,7 +25,7 @@ namespace marketplace.Repositories
         TEntity Add<TDto, TMapperProfile>(TDto entity) where TMapperProfile : Profile, new();
         TEntity Update<TDto, TMapperProfile>(TDto entidad) where TMapperProfile : Profile, new()
         {
-            return Update(Mapeador.Map<TDto, TEntity, TMapperProfile>(entidad));
+            return Update(CustomMapper.Map<TDto, TEntity, TMapperProfile>(entidad));
         }
         #endregion
     }
@@ -150,19 +150,19 @@ namespace marketplace.Repositories
         #region "Métodos vía DTO"
         public IEnumerable<TDto> GetAll<TDto, TMapperProfile>() where TMapperProfile : Profile, new()
         {
-            return Mapeador.Map<TEntity, TDto, TMapperProfile>(All());
+            return CustomMapper.Map<TEntity, TDto, TMapperProfile>(All());
         }
         public TDto Get<TDto, TMapperProfile>(int id) where TMapperProfile : Profile, new()
         {
-            return Mapeador.Map<TEntity, TDto, TMapperProfile>(Get(id));
+            return CustomMapper.Map<TEntity, TDto, TMapperProfile>(Get(id));
         }
         public TEntity Add<TDto, TMapperProfile>(TDto entity) where TMapperProfile : Profile, new()
         {
-            return Add(Mapeador.Map<TDto, TEntity, TMapperProfile>(entity));
+            return Add(CustomMapper.Map<TDto, TEntity, TMapperProfile>(entity));
         }
         public TEntity Update<TDto, TMapperProfile>(TDto entity) where TMapperProfile : Profile, new()
         {
-            return Update(Mapeador.Map<TDto, TEntity, TMapperProfile>(entity));
+            return Update(CustomMapper.Map<TDto, TEntity, TMapperProfile>(entity));
         }
         #endregion
     }
