@@ -21,5 +21,16 @@ namespace marketplace.Models
 		public static Free FREE { get; } = new Free() { id = 1 };
 		public static Reserved RESERVED { get; } = new Reserved() { id = 2 };
 		public static SoldOut SOLDOUT { get; } = new SoldOut() { id = 3};
+
+		public static State GetState(int id)
+		{
+			switch (id)
+			{
+				case 1: return FREE;
+				case 2: return RESERVED;
+				case 3: return SOLDOUT;
+				default: return null;						
+			}
+		}
 	}
 }

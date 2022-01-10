@@ -24,7 +24,7 @@ namespace marketplace.Context
 		public DbSet<Purchase> Purchases { get; set; }
 		public DbSet<PaymentMethod> PaymentMethods { get; set; }
 
-		public DbSet<State> States { get; set; }
+		//public DbSet<State> States { get; set; }
 
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -72,13 +72,13 @@ namespace marketplace.Context
 				.HasValue<CashMethod>("cash_method");
 			});
 
-			modelBuilder.Entity<State>(entity =>
+			/*modelBuilder.Entity<State>(entity =>
 			{
 				entity.HasDiscriminator<string>("state")
 				.HasValue<Free>("FREE")
 				.HasValue<Reserved>("RESERVED")
 				.HasValue<SoldOut>("SOLDOUT");
-			});
+			});*/
 		}
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

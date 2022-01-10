@@ -8,6 +8,9 @@ Steps for run this proyect:
 
 2) Run the command: dotnet ef database update
 
-3) Run the command: dotnet run seeddata
+The next command depends if you want run seed or not
+3) Run the command: dotnet run or Run the command: dotnet run seeddata
 
-soon this project could be built with docker
+In this case everything is commented and prepared in case you want to use the states by database
+
+Soon this project could be built with docker
