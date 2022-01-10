@@ -2,11 +2,12 @@
 using marketplace.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace marketplace.DTO.ProductDTO
+namespace marketplace.DTO.ProductOnSaleDTO
 {
-	public class ProductCreateDTO
+	public class ProductOnSaleOfferDTO
 	{
-		[Required]
+		public decimal price { get; set; }
+
 		public string name { get; set; }
 
 		public class MapperProfile : Profile
@@ -17,9 +18,9 @@ namespace marketplace.DTO.ProductDTO
 			}
 			public static void configure(Profile perfil)
 			{
-				perfil.CreateMap<Product, ProductCreateDTO>()
-					.ReverseMap()
-					.ForMember(dest => dest.deleted, opt => opt.MapFrom(src => false));
+				perfil.CreateMap<ProductOnSale, ProductOnSaleOfferDTO>()
+					.ForMember(dest => dest.name, opt => opt.MapFrom(src => src.Product.name))
+					.ReverseMap();
 			}
 		}
 	}

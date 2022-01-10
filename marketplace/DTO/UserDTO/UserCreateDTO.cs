@@ -21,7 +21,6 @@ namespace marketplace.DTO.UserDTO
         [Required]
         public string email { get; set; }
 
-        public bool deleted { get; set; }
 
         public class MapperProfile : Profile
         {
@@ -32,8 +31,9 @@ namespace marketplace.DTO.UserDTO
             public static void configure(Profile perfil)
             {
                 perfil.CreateMap<User, UserCreateDTO>()
-                    .ReverseMap();
-            }
+                    .ReverseMap()
+					.ForMember(dest => dest.deleted, opt => opt.MapFrom(src => false));
+			}
         }
     }
 }

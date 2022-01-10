@@ -8,8 +8,6 @@ namespace marketplace.DTO.CashMethodDTO
 	{
 		public string description { get; set; }
 
-		public bool deleted { get; set; }
-
 		public class MapperProfile : Profile
 		{
 			public MapperProfile()
@@ -19,7 +17,8 @@ namespace marketplace.DTO.CashMethodDTO
 			public static void configure(Profile perfil)
 			{
 				perfil.CreateMap<CashMethod, CashMethodCreateDTO>()
-					.ReverseMap();
+					.ReverseMap()
+					.ForMember(dest => dest.deleted, opt => opt.MapFrom(src => false));
 			}
 		}
 	}

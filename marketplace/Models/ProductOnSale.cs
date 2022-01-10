@@ -25,6 +25,11 @@ namespace marketplace.Models
 
 		public int state { get; set; }
 
+		public State GetState()
+		{
+			return State.GetState(this.state);
+		}
+
 
 	}
 }

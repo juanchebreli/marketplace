@@ -12,7 +12,6 @@ namespace marketplace.DTO.ProductOnSaleDTO
 		[Required]
 		public bool offer { get; set; }
 
-		public bool deleted { get; set; }
 
 		public class MapperProfile : Profile
 		{
@@ -23,7 +22,10 @@ namespace marketplace.DTO.ProductOnSaleDTO
 			public static void configure(Profile perfil)
 			{
 				perfil.CreateMap<ProductOnSale, ProductOnSaleCreateDTO>()
-					.ReverseMap();
+					.ReverseMap()
+					.ForMember(dest => dest.state, opt => opt.MapFrom(src => State.FREE.id))
+					.ForMember(dest => dest.deleted, opt => opt.MapFrom(src => false));
+
 			}
 		}
 	}

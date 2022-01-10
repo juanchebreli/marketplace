@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using marketplace.Models;
+using marketplace.WebSocket;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,6 +106,10 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+	endpoints.MapControllers();
+	endpoints.MapHub<NewOfferHub>("hub/newOffer");
+});
 
 app.Run();

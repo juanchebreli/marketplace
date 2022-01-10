@@ -11,10 +11,9 @@ namespace marketplace.Services
 		List<PaymentMethod> GetAll();
 		PaymentMethod Get(int id);
 		CashMethod Add(CashMethodCreateDTO entity);
-		/*PaymentMethod Update(PaymentUpdateDTO entity);
-		PaymentMethod Update(CashMethod entity);
+		PaymentMethod Update(CashMethodUpdateDTO entity);
 		List<string> Validations(int id);
-		void Delete(int id);*/
+		void Delete(int id);
 	}
 
 	public class CashMethodService : ICashMethodService
@@ -42,7 +41,6 @@ namespace marketplace.Services
 
 		public CashMethod Add(CashMethodCreateDTO entity)
 		{
-			entity.deleted = false;
 			CashMethod cashMethod = CustomMapper.Map<CashMethodCreateDTO,CashMethod,CashMethodCreateDTO.MapperProfile>(entity);
 			return _paymentRepository.AddCashMethod(cashMethod);
 		}

@@ -51,7 +51,6 @@ namespace marketplace.Services
 		public User Add(UserCreateDTO entity)
 		{
 			string key = _configuration.GetSection("Encrypt")["Key"];
-			entity.deleted = false;
 			entity.password = CryptoEngine.Encrypt(entity.password, key);
 			return _userRepository.Add<UserCreateDTO, UserCreateDTO.MapperProfile>(entity);
 		}

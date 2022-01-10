@@ -32,7 +32,7 @@ namespace marketplace.Controllers
 			}
 			catch (Exception e)
 			{
-				if (_configuration.GetSection("Environment")["ProductOnSaleion"] == "true")
+				if (_configuration.GetSection("Environment")["Production"] == "true")
 					return StatusCode(500, "Server error, contact Technical Support");
 				else
 					return StatusCode(500, "Internal server error." + e);
@@ -50,7 +50,7 @@ namespace marketplace.Controllers
 			}
 			catch (Exception e)
 			{
-				if (_configuration.GetSection("Environment")["ProductOnSaleion"] == "true")
+				if (_configuration.GetSection("Environment")["Production"] == "true")
 					return StatusCode(500, "Server error, contact Technical Support");
 				else
 					return StatusCode(500, "Internal server error." + e);
@@ -71,6 +71,10 @@ namespace marketplace.Controllers
 				if (!errors.Any())
 				{
 					ProductOnSale productOnSale = _productOnSaleService.Add(entity);
+					if (productOnSale.offer)
+					{
+						_productOnSaleService.SendNewOffer(productOnSale);
+					}
 					return Ok(productOnSale);
 				}
 				else
@@ -81,7 +85,7 @@ namespace marketplace.Controllers
 			}
 			catch (Exception e)
 			{
-				if (_configuration.GetSection("Environment")["ProductOnSaleion"] == "true")
+				if (_configuration.GetSection("Environment")["Production"] == "true")
 					return StatusCode(500, "Server error, contact Technical Support");
 				else
 					return StatusCode(500, "Internal server error." + e);
@@ -114,7 +118,7 @@ namespace marketplace.Controllers
 			}
 			catch (Exception e)
 			{
-				if (_configuration.GetSection("Environment")["ProductOnSaleion"] == "true")
+				if (_configuration.GetSection("Environment")["Production"] == "true")
 					return StatusCode(500, "Server error, contact Technical Support");
 				else
 					return StatusCode(500, "Internal server error." + e);
@@ -131,7 +135,7 @@ namespace marketplace.Controllers
 			}
 			catch (Exception e)
 			{
-				if (_configuration.GetSection("Environment")["ProductOnSaleion"] == "true")
+				if (_configuration.GetSection("Environment")["Production"] == "true")
 					return StatusCode(500, "Server error, contact Technical Support");
 				else
 					return StatusCode(500, "Internal server error." + e);

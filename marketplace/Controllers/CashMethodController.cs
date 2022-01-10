@@ -33,7 +33,7 @@ namespace marketplace.Controllers
 			}
 			catch (Exception e)
 			{
-				if (_configuration.GetSection("Environment")["CashMethodion"] == "true")
+				if (_configuration.GetSection("Environment")["Production"] == "true")
 					return StatusCode(500, "Server error, contact Technical Support");
 				else
 					return StatusCode(500, "Internal server error." + e);
@@ -51,7 +51,7 @@ namespace marketplace.Controllers
 			}
 			catch (Exception e)
 			{
-				if (_configuration.GetSection("Environment")["CashMethodion"] == "true")
+				if (_configuration.GetSection("Environment")["Production"] == "true")
 					return StatusCode(500, "Server error, contact Technical Support");
 				else
 					return StatusCode(500, "Internal server error." + e);
@@ -74,7 +74,7 @@ namespace marketplace.Controllers
 			}
 			catch (Exception e)
 			{
-				if (_configuration.GetSection("Environment")["CashMethodion"] == "true")
+				if (_configuration.GetSection("Environment")["Production"] == "true")
 					return StatusCode(500, "Server error, contact Technical Support");
 				else
 					return StatusCode(500, "Internal server error." + e);
@@ -82,7 +82,7 @@ namespace marketplace.Controllers
 		}
 
 
-		/*[Authorize(Roles = "Admin,Moderador")]
+
 		[HttpPut("edit")]
 		public IActionResult Editar([FromBody] CashMethodUpdateDTO entity)
 		{
@@ -93,21 +93,13 @@ namespace marketplace.Controllers
 					return BadRequest("Invalid data.");
 				}
 
-				List<string> errors = _CashMethodService.Validations(entity.id);
-				if (!errors.Any())
-				{
-					_CashMethodService.Update(entity);
-					return Ok();
-				}
-				else
-				{
-					var errors_json = JsonConvert.SerializeObject(errors);
-					return StatusCode(500, errors_json);
-				}
+				_CashMethodService.Update(entity);
+				return Ok();
+
 			}
 			catch (Exception e)
 			{
-				if (_configuration.GetSection("Environment")["CashMethodion"] == "true")
+				if (_configuration.GetSection("Environment")["Production"] == "true")
 					return StatusCode(500, "Server error, contact Technical Support");
 				else
 					return StatusCode(500, "Internal server error." + e);
@@ -124,11 +116,11 @@ namespace marketplace.Controllers
 			}
 			catch (Exception e)
 			{
-				if (_configuration.GetSection("Environment")["CashMethodion"] == "true")
+				if (_configuration.GetSection("Environment")["Production"] == "true")
 					return StatusCode(500, "Server error, contact Technical Support");
 				else
 					return StatusCode(500, "Internal server error." + e);
 			}
-		}*/
+		}
 	}
 }

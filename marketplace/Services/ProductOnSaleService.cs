@@ -4,6 +4,8 @@ using marketplace.DTO.ProductOnSaleDTO;
 using marketplace.Helpers;
 using marketplace.Models;
 using marketplace.Repositories;
+using Microsoft.AspNetCore.SignalR;
+using marketplace.WebSocket;
 
 namespace marketplace.Services
 {
@@ -16,18 +18,21 @@ namespace marketplace.Services
 		ProductOnSale Update(ProductOnSale entity);
 		List<string> Validations(int id);
 		void Delete(int id);
+		Task SendNewOffer(ProductOnSale entity);
 	}
 
 	public class ProductOnSaleService : IProductOnSaleService
 	{
 		private readonly IProductOnSaleRepository _productOnSaleRepository;
 		private readonly IConfiguration _configuration;
+		private readonly IHubContext<NewOfferHub> _newOfferHub;
 
-		public ProductOnSaleService(IProductOnSaleRepository productOnSaleRepository, IConfiguration configuration)
+		public ProductOnSaleService(IProductOnSaleRepository productOnSaleRepository, IConfiguration configuration, IHubContext<NewOfferHub> newOfferHub)
 		{
 
 			_productOnSaleRepository = productOnSaleRepository;
 			_configuration = configuration;
+			_newOfferHub = newOfferHub;
 
 		}
 
@@ -43,7 +48,6 @@ namespace marketplace.Services
 
 		public ProductOnSale Add(ProductOnSaleCreateDTO entity)
 		{
-			entity.deleted = false;
 			return _productOnSaleRepository.Add<ProductOnSaleCreateDTO, ProductOnSaleCreateDTO.MapperProfile>(entity);
 		}
 
@@ -68,6 +72,12 @@ namespace marketplace.Services
 			ProductOnSale productOnSale = _productOnSaleRepository.Get(id);
 			productOnSale.deleted = true;
 			_productOnSaleRepository.Update(productOnSale);
+		}
+
+		public async Task SendNewOffer(ProductOnSale entity)
+		{
+			ProductOnSaleOfferDTO productOnSaleOffer = CustomMapper.Map<ProductOnSale, ProductOnSaleOfferDTO, ProductOnSaleOfferDTO.MapperProfile>(entity);
+			await NewOfferHub.SendNewOffer(_newOfferHub, productOnSaleOffer);
 		}
 	}
 }

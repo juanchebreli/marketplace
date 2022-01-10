@@ -43,7 +43,6 @@ namespace marketplace.Services
 
 		public Product Add(ProductCreateDTO entity)
 		{
-			entity.deleted = false;
 			return _productRepository.Add<ProductCreateDTO, ProductCreateDTO.MapperProfile>(entity);
 		}
 
