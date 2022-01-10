@@ -11,8 +11,7 @@ namespace marketplace.Services
 		List<PaymentMethod> GetAll();
 		PaymentMethod Get(int id);
 		CashMethod Add(CashMethodCreateDTO entity);
-		PaymentMethod Update(CashMethodUpdateDTO entity);
-		List<string> Validations(int id);
+		CashMethod Update(CashMethodUpdateDTO entity);
 		void Delete(int id);
 	}
 
