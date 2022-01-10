@@ -59,7 +59,7 @@ namespace marketplace.Controllers
 
 		[Authorize(Roles = "Admin,Mod")]
 		[HttpPost("create")]
-		public IActionResult Crear([FromBody] ProductOnSaleCreateDTO entity)
+		public async Task<IActionResult> Crear([FromBody] ProductOnSaleCreateDTO entity)
 		{
 			try
 			{
@@ -73,7 +73,7 @@ namespace marketplace.Controllers
 					ProductOnSale productOnSale = _productOnSaleService.Add(entity);
 					if (productOnSale.offer)
 					{
-						_productOnSaleService.SendNewOffer(productOnSale);
+						await _productOnSaleService.SendNewOffer(productOnSale);
 					}
 					return Ok(productOnSale);
 				}

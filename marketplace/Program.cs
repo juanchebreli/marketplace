@@ -76,6 +76,10 @@ builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 //seed
 builder.Services.AddTransient<DataSeeder>();
 
+//signal R for websocket
+builder.Services.AddSignalR();
+
+
 var app = builder.Build();
 
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
@@ -105,6 +109,8 @@ app.UseCors(MyAllowSpecificOrigins);
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseRouting();
 
 app.UseEndpoints(endpoints =>
 {
