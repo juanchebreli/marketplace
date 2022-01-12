@@ -21,8 +21,8 @@ namespace marketplace.Repositories
 
 		public List<ProductOnSale> GetAll()
 		{
-			List<ProductOnSale> users = AppDbContext.ProductsOnSale.Where(entity => entity.deleted == false).OrderBy(entity => entity.price).ToList();
-			return users;
+			List<ProductOnSale> productOnSales = AppDbContext.ProductsOnSale.Where(entity => entity.deleted == false).OrderBy(entity => entity.price).ToList();
+			return productOnSales;
 		}
 
 	}

@@ -7,9 +7,16 @@ namespace marketplace.Repositories
 {
 	public interface IPaymentRepository : IGenericRepository<PaymentMethod>
 	{
-		public List<PaymentMethod> GetAllCash();
-		public CashMethod AddCashMethod(CashMethod cashMethod);
-		public CashMethod UpddateCashMethod(CashMethod cashMethod);
+		// CashMethod
+		List<PaymentMethod> GetAllCash();
+		CashMethod AddCashMethod(CashMethod cashMethod);
+		CashMethod UpddateCashMethod(CashMethod cashMethod);
+
+
+		//CardMethod
+		List<PaymentMethod> GetAllCard();
+		CardMethod AddCardMethod(CardMethod cashMethod);
+		CardMethod UpddateCardMethod(CardMethod cashMethod);
 
 	}
 	public class PaymentRepository : GenericRepository<PaymentMethod, AppDbContext>, IPaymentRepository
@@ -24,7 +31,7 @@ namespace marketplace.Repositories
 		public List<PaymentMethod> GetAllCash()
 		{
 			Type cash = typeof(CashMethod);
-			List<PaymentMethod> cashes = AppDbContext.PaymentMethods.Where(entity =>  (entity.GetType().Equals(cash)) && (entity.deleted == false)).ToList();
+			List<PaymentMethod> cashes = AppDbContext.PaymentMethods.Where(entity => (entity.GetType().Equals(cash)) && (entity.deleted == false)).ToList();
 			return cashes;
 		}
 
@@ -42,5 +49,25 @@ namespace marketplace.Repositories
 			return cashMethod;
 		}
 
+		public List<PaymentMethod> GetAllCard()
+		{
+			Type cash = typeof(CardMethod);
+			List<PaymentMethod> cashes = AppDbContext.PaymentMethods.Where(entity => (entity.GetType().Equals(cash)) && (entity.deleted == false)).ToList();
+			return cashes;
+		}
+
+		public CardMethod AddCardMethod(CardMethod cardMethod)
+		{
+			AppDbContext.PaymentMethods.Add(cardMethod);
+			AppDbContext.SaveChanges();
+			return cardMethod;
+		}
+
+		public CardMethod UpddateCardMethod(CardMethod cardMethod)
+		{
+			AppDbContext.PaymentMethods.Update(cardMethod);
+			AppDbContext.SaveChanges();
+			return cardMethod;
+		}
 	}
 }

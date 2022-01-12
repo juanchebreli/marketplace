@@ -8,8 +8,8 @@ using Newtonsoft.Json;
 namespace marketplace.Controllers
 {
 	[ApiController]
-	[Authorize]
-	[Route("api/[controller]")]
+	//[Authorize]
+	[Route("marketplace/[controller]")]
 	public class ProductController : ControllerBase
 	{
 		private readonly IProductService _productService;
@@ -57,7 +57,6 @@ namespace marketplace.Controllers
 			}
 		}
 
-		[Authorize(Roles = "Admin,Mod")]
 		[HttpPost("create")]
 		public IActionResult Crear([FromBody] ProductCreateDTO entity)
 		{

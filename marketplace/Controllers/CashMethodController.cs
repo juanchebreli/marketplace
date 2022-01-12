@@ -1,4 +1,4 @@
-﻿using marketplace.DTO.CashMethodDTO;
+﻿using marketplace.DTO.PaymentMethodDTO.CashMethodDTO;
 using marketplace.Models;
 using marketplace.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +9,7 @@ namespace marketplace.Controllers
 {
 	[ApiController]
 	[Authorize]
-	[Route("api/[controller]")]
+	[Route("marketplace/[controller]")]
 	public class CashMethodController : ControllerBase
 	{
 		private readonly ICashMethodService _CashMethodService;
@@ -47,29 +47,6 @@ namespace marketplace.Controllers
 			try
 			{
 				PaymentMethod CashMethod = _CashMethodService.Get(id);
-				return Ok(CashMethod);
-			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
-		}
-
-		[AllowAnonymous]
-		[Authorize(Roles = "Admin,Mod")]
-		[HttpPost("create")]
-		public IActionResult Crear([FromBody] CashMethodCreateDTO entity)
-		{
-			try
-			{
-				if (!ModelState.IsValid)
-				{
-					return BadRequest("Invalid data.");
-				}
-				CashMethod CashMethod = _CashMethodService.Add(entity);
 				return Ok(CashMethod);
 			}
 			catch (Exception e)

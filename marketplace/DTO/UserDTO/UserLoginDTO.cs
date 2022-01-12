@@ -23,7 +23,8 @@ namespace marketplace.DTO.UserDTO
             public static void configure(Profile perfil)
             {
                 perfil.CreateMap<User, UserLoginDTO>()
-                    .ReverseMap();
+					.ForMember(dest => dest.role, opt => opt.MapFrom(src => src.Role.name))
+					.ReverseMap();
             }
         }
 

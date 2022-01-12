@@ -2,6 +2,7 @@
 using marketplace.DTO.UserDTO;
 using marketplace.Helpers;
 using marketplace.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace marketplace.Repositories
 {
@@ -31,7 +32,7 @@ namespace marketplace.Repositories
         public User AuthenticateUser(LoginDTO loginCredentials)
         {
 			string key = _configuration.GetSection("Encrypt")["Key"];
-			User user = AppDbContext.Users.FirstOrDefault(x => x.username == loginCredentials.username);
+			User user = AppDbContext.Users.Where(x => x.username == loginCredentials.username).Include(user=> user.Role).FirstOrDefault();
 			if (user != null)
 			{
 				string passwordDecrypt = CryptoEngine.Decrypt(user.password,key);

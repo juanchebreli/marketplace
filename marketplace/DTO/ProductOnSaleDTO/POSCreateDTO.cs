@@ -11,6 +11,10 @@ namespace marketplace.DTO.ProductOnSaleDTO
 
 		[Required]
 		public bool offer { get; set; }
+		[Required]
+		public int Productid { get; set; }
+		[Required]
+		public int Userid { get; set; }
 
 
 		public class MapperProfile : Profile

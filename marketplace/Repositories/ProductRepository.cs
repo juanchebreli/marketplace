@@ -22,8 +22,8 @@ namespace marketplace.Repositories
 
 		public List<Product> GetAll()
 		{
-			List<Product> users = AppDbContext.Products.Where(entity => entity.deleted == false).OrderBy(entity => entity.name).ToList();
-			return users;
+			List<Product> products = AppDbContext.Products.Where(entity => entity.deleted == false).OrderBy(entity => entity.name).ToList();
+			return products;
 		}
 
 		public bool FreeName(string name, int id)

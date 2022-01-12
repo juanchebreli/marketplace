@@ -20,9 +20,11 @@ namespace marketplace.DTO.UserDTO
 
         [Required]
         public string email { get; set; }
+		[Required]
+		public int Roleid { get; set; }
 
 
-        public class MapperProfile : Profile
+		public class MapperProfile : Profile
         {
             public MapperProfile()
             {

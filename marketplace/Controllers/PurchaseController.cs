@@ -1,4 +1,4 @@
-﻿using marketplace.DTO.ProductOnSaleDTO;
+﻿using marketplace.DTO.PurchaseDTO;
 using marketplace.Models;
 using marketplace.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -10,14 +10,14 @@ namespace marketplace.Controllers
 	[ApiController]
 	//[Authorize]
 	[Route("marketplace/[controller]")]
-	public class ProductOnSaleController : ControllerBase
+	public class PurchaseController : ControllerBase
 	{
-		private readonly IProductOnSaleService _productOnSaleService;
+		private readonly IPurchaseService _purchaseService;
 		private readonly IConfiguration _configuration;
 
-		public ProductOnSaleController(IConfiguration configuration, IProductOnSaleService productOnSaleService)
+		public PurchaseController(IConfiguration configuration, IPurchaseService purchaseService)
 		{
-			_productOnSaleService = productOnSaleService;
+			_purchaseService = purchaseService;
 			_configuration = configuration;
 		}
 
@@ -27,12 +27,12 @@ namespace marketplace.Controllers
 		{
 			try
 			{
-				List<ProductOnSale> productOnSales = _productOnSaleService.GetAll();
-				return Ok(productOnSales);
+				List<Purchase> purchases = _purchaseService.GetAll();
+				return Ok(purchases);
 			}
 			catch (Exception e)
 			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
+				if (_configuration.GetSection("Environment")["Purchaseion"] == "true")
 					return StatusCode(500, "Server error, contact Technical Support");
 				else
 					return StatusCode(500, "Internal server error." + e);
@@ -45,21 +45,20 @@ namespace marketplace.Controllers
 		{
 			try
 			{
-				ProductOnSale productOnSale = _productOnSaleService.Get(id);
-				return Ok(productOnSale);
+				Purchase purchase = _purchaseService.Get(id);
+				return Ok(purchase);
 			}
 			catch (Exception e)
 			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
+				if (_configuration.GetSection("Environment")["Purchaseion"] == "true")
 					return StatusCode(500, "Server error, contact Technical Support");
 				else
 					return StatusCode(500, "Internal server error." + e);
 			}
 		}
-
 
 		[HttpPost("create")]
-		public async Task<IActionResult> Crear([FromBody] ProductOnSaleCreateDTO entity)
+		public IActionResult Crear([FromBody] PurchaseCreateDTO entity)
 		{
 			try
 			{
@@ -67,47 +66,10 @@ namespace marketplace.Controllers
 				{
 					return BadRequest("Invalid data.");
 				}
-				List<string> errors = _productOnSaleService.Validations(0);
+				List<string> errors = _purchaseService.Validations(entity.Userid,entity.ProductOnSaleid, 0);
 				if (!errors.Any())
 				{
-					ProductOnSale productOnSale = _productOnSaleService.Add(entity);
-					if (productOnSale.offer)
-					{
-						await _productOnSaleService.SendNewOffer(productOnSale);
-					}
-					return Ok(productOnSale);
-				}
-				else
-				{
-					var errors_json = JsonConvert.SerializeObject(errors);
-					return StatusCode(500, errors_json);
-				}
-			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
-		}
-
-
-		[Authorize(Roles = "Admin,Moderador")]
-		[HttpPut("edit")]
-		public IActionResult Editar([FromBody] ProductOnSaleUpdateDTO entity)
-		{
-			try
-			{
-				if (!ModelState.IsValid)
-				{
-					return BadRequest("Invalid data.");
-				}
-
-				List<string> errors = _productOnSaleService.Validations(entity.id);
-				if (!errors.Any())
-				{
-					_productOnSaleService.Update(entity);
+					Purchase purchase = _purchaseService.Add(entity);
 					return Ok();
 				}
 				else
@@ -118,7 +80,40 @@ namespace marketplace.Controllers
 			}
 			catch (Exception e)
 			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
+				if (_configuration.GetSection("Environment")["Purchaseion"] == "true")
+					return StatusCode(500, "Server error, contact Technical Support");
+				else
+					return StatusCode(500, "Internal server error." + e);
+			}
+		}
+
+
+		[Authorize(Roles = "Admin,Moderador")]
+		[HttpPut("edit")]
+		public IActionResult Editar([FromBody] PurchaseUpdateDTO entity)
+		{
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					return BadRequest("Invalid data.");
+				}
+
+				List<string> errors = _purchaseService.Validations(entity.Userid,entity.ProductOnSaleid, entity.id);
+				if (!errors.Any())
+				{
+					_purchaseService.Update(entity);
+					return Ok();
+				}
+				else
+				{
+					var errors_json = JsonConvert.SerializeObject(errors);
+					return StatusCode(500, errors_json);
+				}
+			}
+			catch (Exception e)
+			{
+				if (_configuration.GetSection("Environment")["Purchaseion"] == "true")
 					return StatusCode(500, "Server error, contact Technical Support");
 				else
 					return StatusCode(500, "Internal server error." + e);
@@ -130,12 +125,12 @@ namespace marketplace.Controllers
 		{
 			try
 			{
-				_productOnSaleService.Delete(id);
+				_purchaseService.Delete(id);
 				return Ok();
 			}
 			catch (Exception e)
 			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
+				if (_configuration.GetSection("Environment")["Purchaseion"] == "true")
 					return StatusCode(500, "Server error, contact Technical Support");
 				else
 					return StatusCode(500, "Internal server error." + e);

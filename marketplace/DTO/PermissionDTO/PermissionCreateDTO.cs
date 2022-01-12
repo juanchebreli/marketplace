@@ -2,11 +2,14 @@
 using marketplace.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace marketplace.DTO.CashMethodDTO
+namespace marketplace.DTO.PermissionDTO
 {
-	public class CashMethodCreateDTO
+	public class PermissionCreateDTO
 	{
-		public string description { get; set; }
+		[Required]
+		public int id { get; set; }
+		[Required]
+		public string name { get; set; }
 
 		public class MapperProfile : Profile
 		{
@@ -16,11 +19,10 @@ namespace marketplace.DTO.CashMethodDTO
 			}
 			public static void configure(Profile perfil)
 			{
-				perfil.CreateMap<CashMethod, CashMethodCreateDTO>()
+				perfil.CreateMap<Permission, PermissionCreateDTO>()
 					.ReverseMap()
 					.ForMember(dest => dest.deleted, opt => opt.MapFrom(src => false));
 			}
 		}
 	}
 }
-

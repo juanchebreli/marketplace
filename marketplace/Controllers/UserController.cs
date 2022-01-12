@@ -9,7 +9,7 @@ namespace marketplace.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("marketplace/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -57,7 +57,7 @@ namespace marketplace.Controllers
             }
         }
 
-		[AllowAnonymous]
+		
         [HttpPost("create")]
         public IActionResult Crear([FromBody] UserCreateDTO entity)
         {
