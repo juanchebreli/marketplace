@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace marketplace.Controllers
 {
 	[ApiController]
-	//[Authorize]
+	[Authorize]
 	[Route("marketplace/[controller]")]
 	public class RoleController : ControllerBase
 	{
