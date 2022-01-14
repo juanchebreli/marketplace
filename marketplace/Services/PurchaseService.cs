@@ -6,6 +6,7 @@ using marketplace.Models;
 using marketplace.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
 using marketplace.Context;
+using marketplace.DTO.PaymentMethodDTO;
 
 namespace marketplace.Services
 {
@@ -16,9 +17,9 @@ namespace marketplace.Services
 		Purchase Add(PurchaseCreateDTO entity);
 		Purchase Update(PurchaseUpdateDTO entity);
 		Purchase Update(Purchase entity);
-		List<string> Validations(int Userid, int ProductOnSaleid, int id);
+		List<string> Validations(int Userid, int ProductOnSaleid,int paymentMethod, int id);
 		void Delete(int id);
-		PaymentMethod CreatePaymentMethod(int paymentMethod, string description);
+		PaymentMethod CreatePaymentMethod(PaymentMethodCreateDTO paymentMethodCreateDTO);
 	}
 
 	public class PurchaseService : IPurchaseService
@@ -63,7 +64,7 @@ namespace marketplace.Services
 			{
 				try
 				{
-					PaymentMethod paymentMethod = this.CreatePaymentMethod(entity.PaymentMethod, entity.description);
+					PaymentMethod paymentMethod = this.CreatePaymentMethod(entity.paymentMethod);
 					entity.PaymentMethodid = paymentMethod.id;
 					Purchase purchase = CustomMapper.Map<PurchaseCreateDTO, Purchase, PurchaseCreateDTO.MapperProfile>(entity);
 					_purchaseRepository.Add(purchase);
@@ -87,15 +88,17 @@ namespace marketplace.Services
 		{
 			return _purchaseRepository.Update(entity);
 		}
-		public List<string> Validations(int Userid, int ProductOnSaleid, int id)
+		public List<string> Validations(int Userid, int ProductOnSaleid, int paymentMethod, int id)
 		{
 			List<string> errors = new List<string>();
 			if (_userService.Get(Userid) == null)
 				errors.Add("User dont' exist");
 			if (_productOnSaleserService.Get(ProductOnSaleid) == null)
 				errors.Add("Product On Sale dont' exist");
-			if (_purchaseRepository.GetByProductOnSale(ProductOnSaleid) == null)
+			if (_purchaseRepository.GetByProductOnSale(ProductOnSaleid) != null)
 				errors.Add("Product On Sale already have a sale");
+			if ((paymentMethod != PaymentMethod.CASH.id) && (paymentMethod != PaymentMethod.CARD.id))
+				errors.Add("Payment method is invalid");
 			return errors;
 		}
 
@@ -107,19 +110,19 @@ namespace marketplace.Services
 			_purchaseRepository.Update(purchase);
 		}
 
-		public PaymentMethod CreatePaymentMethod(int paymentMethod, string description)
+		public PaymentMethod CreatePaymentMethod(PaymentMethodCreateDTO paymentMethodCreateDTO)
 		{
 
 			// I don't use case becouse id needs to be constant
-			if (paymentMethod == PaymentMethod.CASH.id)
+			if (paymentMethodCreateDTO.method == PaymentMethod.CASH.id)
 			{
-				return _cashMethodService.Add(description);
+				return _cashMethodService.Add(paymentMethodCreateDTO);
 			}
 			else
 			{
-				if (paymentMethod == PaymentMethod.CARD.id)
+				if (paymentMethodCreateDTO.method == PaymentMethod.CARD.id)
 				{
-					return _cardMethodService.Add(description);
+					return _cardMethodService.Add(paymentMethodCreateDTO);
 				}
 			}
 			return null;

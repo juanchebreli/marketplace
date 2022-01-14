@@ -1,4 +1,4 @@
-﻿using marketplace.DTO.PaymentMethodDTO.CashMethodDTO;
+﻿using marketplace.DTO.RoleDTO;
 using marketplace.Models;
 using marketplace.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -10,26 +10,25 @@ namespace marketplace.Controllers
 	[ApiController]
 	//[Authorize]
 	[Route("marketplace/[controller]")]
-	public class CashMethodController : ControllerBase
+	public class RoleController : ControllerBase
 	{
-		private readonly ICashMethodService _CashMethodService;
+		private readonly IRoleService _roleService;
 		private readonly IConfiguration _configuration;
 
-		public CashMethodController(IConfiguration configuration, ICashMethodService CashMethodService)
+		public RoleController(IConfiguration configuration, IRoleService roleService)
 		{
-			_CashMethodService = CashMethodService;
+			_roleService = roleService;
 			_configuration = configuration;
 		}
 
 
-		[AllowAnonymous]
 		[HttpGet("all")]
 		public IActionResult All()
 		{
 			try
 			{
-				List<PaymentMethod> CashMethods = _CashMethodService.GetAll();
-				return Ok(CashMethods);
+				List<Role> roles = _roleService.GetAll();
+				return Ok(roles);
 			}
 			catch (Exception e)
 			{
@@ -46,8 +45,38 @@ namespace marketplace.Controllers
 		{
 			try
 			{
-				PaymentMethod CashMethod = _CashMethodService.Get(id);
-				return Ok(CashMethod);
+				Role role = _roleService.Get(id);
+				return Ok(role);
+			}
+			catch (Exception e)
+			{
+				if (_configuration.GetSection("Environment")["Production"] == "true")
+					return StatusCode(500, "Server error, contact Technical Support");
+				else
+					return StatusCode(500, "Internal server error." + e);
+			}
+		}
+
+		[HttpPost("create")]
+		public IActionResult Crear([FromBody] RoleCreateDTO entity)
+		{
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					return BadRequest("Invalid data.");
+				}
+				List<string> errors = _roleService.Validations(entity.name, 0);
+				if (!errors.Any())
+				{
+					Role role = _roleService.Add(entity);
+					return Ok(role);
+				}
+				else
+				{
+					var errors_json = JsonConvert.SerializeObject(errors);
+					return StatusCode(500, errors_json);
+				}
 			}
 			catch (Exception e)
 			{
@@ -59,9 +88,9 @@ namespace marketplace.Controllers
 		}
 
 
-
+		[Authorize(Roles = "Admin,Moderador")]
 		[HttpPut("edit")]
-		public IActionResult Editar([FromBody] CashMethodUpdateDTO entity)
+		public IActionResult Editar([FromBody] RoleUpdateDTO entity)
 		{
 			try
 			{
@@ -70,9 +99,17 @@ namespace marketplace.Controllers
 					return BadRequest("Invalid data.");
 				}
 
-				_CashMethodService.Update(entity);
-				return Ok();
-
+				List<string> errors = _roleService.Validations(entity.name, entity.id);
+				if (!errors.Any())
+				{
+					_roleService.Update(entity);
+					return Ok();
+				}
+				else
+				{
+					var errors_json = JsonConvert.SerializeObject(errors);
+					return StatusCode(500, errors_json);
+				}
 			}
 			catch (Exception e)
 			{
@@ -88,7 +125,7 @@ namespace marketplace.Controllers
 		{
 			try
 			{
-				_CashMethodService.Delete(id);
+				_roleService.Delete(id);
 				return Ok();
 			}
 			catch (Exception e)

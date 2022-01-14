@@ -2,6 +2,7 @@
 using marketplace.Models;
 using marketplace.Repositories;
 using marketplace.DTO.PaymentMethodDTO.CardMethodDTO;
+using marketplace.DTO.PaymentMethodDTO;
 
 namespace marketplace.Services
 {
@@ -9,7 +10,7 @@ namespace marketplace.Services
 	{
 		List<PaymentMethod> GetAll();
 		PaymentMethod Get(int id);
-		CardMethod Add(string description);
+		CardMethod Add(PaymentMethodCreateDTO entity);
 		CardMethod Update(CardMethodUpdateDTO entity);
 		void Delete(int id);
 	}
@@ -37,9 +38,10 @@ namespace marketplace.Services
 			return _paymentRepository.Get(id);
 		}
 
-		public CardMethod Add(string _description)
+		public CardMethod Add(PaymentMethodCreateDTO entity)
 		{
-			CardMethod cardMethod = new CardMethod() { deleted = false, description = _description };
+			CardMethod cardMethod = CustomMapper.Map<PaymentMethodCreateDTO, CardMethod, PaymentMethodCreateDTO.MapperProfileCard>(entity);
+			cardMethod.type = PaymentMethod.CARD.type;
 			return _paymentRepository.AddCardMethod(cardMethod);
 		}
 

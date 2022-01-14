@@ -3,6 +3,7 @@ using marketplace.DTO.PaymentMethodDTO.CashMethodDTO;
 using marketplace.Helpers;
 using marketplace.Models;
 using marketplace.Repositories;
+using marketplace.DTO.PaymentMethodDTO;
 
 namespace marketplace.Services
 {
@@ -10,7 +11,7 @@ namespace marketplace.Services
 	{
 		List<PaymentMethod> GetAll();
 		PaymentMethod Get(int id);
-		CashMethod Add(string description);
+		CashMethod Add(PaymentMethodCreateDTO entity);
 		CashMethod Update(CashMethodUpdateDTO entity);
 		void Delete(int id);
 	}
@@ -38,9 +39,10 @@ namespace marketplace.Services
 			return _paymentRepository.Get(id);
 		}
 
-		public CashMethod Add(string _description)
+		public CashMethod Add(PaymentMethodCreateDTO entity)
 		{
-			CashMethod cashMethod = new CashMethod() { deleted = false, description = _description};
+			CashMethod cashMethod = CustomMapper.Map<PaymentMethodCreateDTO, CashMethod, PaymentMethodCreateDTO.MapperProfileCash>(entity);
+			cashMethod.type = PaymentMethod.CASH.type;
 			return _paymentRepository.AddCashMethod(cashMethod);
 		}
 

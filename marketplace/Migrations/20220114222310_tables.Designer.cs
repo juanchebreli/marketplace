@@ -12,7 +12,7 @@ using marketplace.Context;
 namespace marketplace.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220114210338_tables")]
+    [Migration("20220114222310_tables")]
     partial class tables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,7 +40,6 @@ namespace marketplace.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("type")

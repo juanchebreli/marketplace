@@ -28,7 +28,8 @@ namespace marketplace.Repositories
 
 		public Purchase GetByProductOnSale(int ProductOnSaleId)
 		{
-			return AppDbContext.Purchases.FirstOrDefault(purchase => purchase.ProductOnSaleid == ProductOnSaleId);
+			Purchase purchase = AppDbContext.Purchases.FirstOrDefault(purchase => purchase.ProductOnSaleid == ProductOnSaleId);
+			return purchase;
 		}
 	}
 }

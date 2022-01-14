@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace marketplace.Controllers
 {
 	[ApiController]
-	//[Authorize]
+	[Authorize]
 	[Route("marketplace/[controller]")]
 	public class PurchaseController : ControllerBase
 	{
@@ -66,7 +66,7 @@ namespace marketplace.Controllers
 				{
 					return BadRequest("Invalid data.");
 				}
-				List<string> errors = _purchaseService.Validations(entity.Userid,entity.ProductOnSaleid, 0);
+				List<string> errors = _purchaseService.Validations(entity.Userid,entity.ProductOnSaleid,entity.paymentMethod.method, 0);
 				if (!errors.Any())
 				{
 					Purchase purchase = _purchaseService.Add(entity);
@@ -99,7 +99,7 @@ namespace marketplace.Controllers
 					return BadRequest("Invalid data.");
 				}
 
-				List<string> errors = _purchaseService.Validations(entity.Userid,entity.ProductOnSaleid, entity.id);
+				List<string> errors = _purchaseService.Validations(entity.Userid,entity.ProductOnSaleid,entity.PaymentMethodid, entity.id);
 				if (!errors.Any())
 				{
 					_purchaseService.Update(entity);

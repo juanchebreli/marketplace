@@ -38,7 +38,6 @@ namespace marketplace.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("type")

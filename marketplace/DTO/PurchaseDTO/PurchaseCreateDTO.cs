@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using marketplace.DTO.PaymentMethodDTO;
 using marketplace.Models;
 using System.ComponentModel.DataAnnotations;
 
@@ -16,10 +17,9 @@ namespace marketplace.DTO.PurchaseDTO
 		[Required]
 		public int ProductOnSaleid { get; set; }
 
-		[Required]
-		public int PaymentMethod { get; set; }
 
-		public string description { get; set; }
+		public PaymentMethodCreateDTO paymentMethod { get; set; }
+
 		public int PaymentMethodid { get; set; }
 
 
@@ -35,7 +35,7 @@ namespace marketplace.DTO.PurchaseDTO
 					.ReverseMap()
 					.ForMember(dest => dest.deleted, opt => opt.MapFrom(src => false))
 					.ForMember(dest => dest.date, opt => opt.MapFrom(src => DateTime.Now))
-					.ForMember(x => x.PaymentMethod, opt => opt.Ignore()); ;
+					.ForMember(x => x.PaymentMethod, opt => opt.Ignore());
 			}
 		}
 	}
