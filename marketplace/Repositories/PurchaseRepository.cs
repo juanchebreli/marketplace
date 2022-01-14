@@ -7,7 +7,8 @@ namespace marketplace.Repositories
 {
 	public interface IPurchaseRepository : IGenericRepository<Purchase>
 	{
-		public List<Purchase> GetAll();
+		List<Purchase> GetAll();
+		Purchase GetByProductOnSale(int ProductOnSaleId);
 
 	}
 	public class PurchaseRepository : GenericRepository<Purchase, AppDbContext>, IPurchaseRepository
@@ -25,5 +26,9 @@ namespace marketplace.Repositories
 			return purchases;
 		}
 
+		public Purchase GetByProductOnSale(int ProductOnSaleId)
+		{
+			return AppDbContext.Purchases.FirstOrDefault(purchase => purchase.ProductOnSaleid == ProductOnSaleId);
+		}
 	}
 }

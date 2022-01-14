@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace marketplace.Migrations
 {
-    public partial class all_tables : Migration
+    public partial class tables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,8 @@ namespace marketplace.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    payment_type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     bankName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     cbu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     deleted = table.Column<bool>(type: "bit", nullable: false)
@@ -66,18 +67,6 @@ namespace marketplace.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "States",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false),
-                    state = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_States", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -240,9 +229,6 @@ namespace marketplace.Migrations
 
             migrationBuilder.DropTable(
                 name: "Purchases");
-
-            migrationBuilder.DropTable(
-                name: "States");
 
             migrationBuilder.DropTable(
                 name: "Permissions");

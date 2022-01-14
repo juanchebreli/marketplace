@@ -30,6 +30,10 @@ namespace marketplace.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("deleted")
                         .HasColumnType("bit");
 
@@ -37,7 +41,7 @@ namespace marketplace.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("payment_type")
+                    b.Property<string>("type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -45,7 +49,7 @@ namespace marketplace.Migrations
 
                     b.ToTable("PaymentMethods");
 
-                    b.HasDiscriminator<string>("payment_type").HasValue("PaymentMethod");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("PaymentMethod");
                 });
 
             modelBuilder.Entity("marketplace.Models.Permission", b =>
@@ -182,22 +186,6 @@ namespace marketplace.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("marketplace.Models.State", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("state")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("States");
-
-                    b.HasDiscriminator<string>("state").HasValue("State");
-                });
-
             modelBuilder.Entity("marketplace.Models.User", b =>
                 {
                     b.Property<int>("id")
@@ -266,35 +254,14 @@ namespace marketplace.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasDiscriminator().HasValue("card_method");
+                    b.HasDiscriminator().HasValue("CardMethod");
                 });
 
             modelBuilder.Entity("marketplace.Models.CashMethod", b =>
                 {
                     b.HasBaseType("marketplace.Models.PaymentMethod");
 
-                    b.HasDiscriminator().HasValue("cash_method");
-                });
-
-            modelBuilder.Entity("marketplace.Models.Free", b =>
-                {
-                    b.HasBaseType("marketplace.Models.State");
-
-                    b.HasDiscriminator().HasValue("FREE");
-                });
-
-            modelBuilder.Entity("marketplace.Models.Reserved", b =>
-                {
-                    b.HasBaseType("marketplace.Models.State");
-
-                    b.HasDiscriminator().HasValue("RESERVED");
-                });
-
-            modelBuilder.Entity("marketplace.Models.SoldOut", b =>
-                {
-                    b.HasBaseType("marketplace.Models.State");
-
-                    b.HasDiscriminator().HasValue("SOLDOUT");
+                    b.HasDiscriminator().HasValue("CashMethod");
                 });
 
             modelBuilder.Entity("marketplace.Models.ProductOnSale", b =>

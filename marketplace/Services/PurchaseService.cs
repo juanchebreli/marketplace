@@ -94,6 +94,8 @@ namespace marketplace.Services
 				errors.Add("User dont' exist");
 			if (_productOnSaleserService.Get(ProductOnSaleid) == null)
 				errors.Add("Product On Sale dont' exist");
+			if (_purchaseRepository.GetByProductOnSale(ProductOnSaleid) == null)
+				errors.Add("Product On Sale already have a sale");
 			return errors;
 		}
 
@@ -107,13 +109,22 @@ namespace marketplace.Services
 
 		public PaymentMethod CreatePaymentMethod(int paymentMethod, string description)
 		{
-			switch (paymentMethod)
-			{
-				case PaymentMethod.CASHMETHOD: return _cashMethodService.Add(description);
-				case PaymentMethod.CARDMETHOD: return _cardMethodService.Add(description);
-				default: return null;
-			}
 
+			// I don't use case becouse id needs to be constant
+			if (paymentMethod == PaymentMethod.CASH.id)
+			{
+				return _cashMethodService.Add(description);
+			}
+			else
+			{
+				if (paymentMethod == PaymentMethod.CARD.id)
+				{
+					return _cardMethodService.Add(description);
+				}
+			}
+			return null;
 		}
+
+
 	}
 }

@@ -2,12 +2,14 @@
 using marketplace.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace marketplace.DTO.PaymentMethodDTO
+namespace marketplace.DTO.PaymentMethodDTO.CardMethodDTO
 {
-	public class PaymentMethodCreateDTO
+	public class CardMethodCreateDTO
 	{
 		public string description { get; set; }
+		[Required]
 		public string bankName { get; set; }
+		[Required]
 		public string cbu { get; set; }
 
 		public class MapperProfile : Profile
@@ -18,10 +20,12 @@ namespace marketplace.DTO.PaymentMethodDTO
 			}
 			public static void configure(Profile perfil)
 			{
-				perfil.CreateMap<PaymentMethod, PaymentMethodCreateDTO>()
+				perfil.CreateMap<CashMethod, CardMethodCreateDTO>()
 					.ReverseMap()
-					.ForMember(dest => dest.deleted, opt => opt.MapFrom(src => false));
+					.ForMember(dest => dest.deleted, opt => opt.MapFrom(src => false))
+					.ForMember(dest => dest.type, opt => opt.MapFrom(src => PaymentMethod.CARD.type));
 			}
 		}
 	}
 }
+

@@ -30,8 +30,7 @@ namespace marketplace.Repositories
 
 		public List<PaymentMethod> GetAllCash()
 		{
-			Type cash = typeof(CashMethod);
-			List<PaymentMethod> cashes = AppDbContext.PaymentMethods.Where(entity => (entity.GetType().Equals(cash)) && (entity.deleted == false)).ToList();
+			List<PaymentMethod> cashes = AppDbContext.PaymentMethods.Where(entity => (entity.type == PaymentMethod.CASH.type) && (entity.deleted == false)).ToList();
 			return cashes;
 		}
 
@@ -52,7 +51,7 @@ namespace marketplace.Repositories
 		public List<PaymentMethod> GetAllCard()
 		{
 			Type cash = typeof(CardMethod);
-			List<PaymentMethod> cashes = AppDbContext.PaymentMethods.Where(entity => (entity.GetType().Equals(cash)) && (entity.deleted == false)).ToList();
+			List<PaymentMethod> cashes = AppDbContext.PaymentMethods.Where(entity => (entity.type == PaymentMethod.CASH.type) && (entity.deleted == false)).ToList();
 			return cashes;
 		}
 

@@ -4,12 +4,12 @@
 	public abstract class PaymentMethod : Entity<int>
 	{
 		public string description { get; set; }
+		public string type { get; set; }
 
 		public virtual Purchase Purchase { get; set; }
 
-		public const int CARDMETHOD = 1;
-
-		public const  int CASHMETHOD = 2;
+		public static  CashMethod CASH { get; } = new CashMethod() { id = 1 , type = "CASH"};
+		public static   CardMethod CARD { get; } = new CardMethod() { id = 2, type = "CARD" };
 
 	}
 }

@@ -64,13 +64,9 @@ namespace marketplace.Context
 				entity.HasKey(e => e.id);
 			});
 
-			modelBuilder.Entity<PaymentMethod>(entity =>
-			{
-				entity.HasKey(e => e.id);
-				entity.HasDiscriminator<string>("payment_type")
-				.HasValue<CardMethod>("card_method")
-				.HasValue<CashMethod>("cash_method");
-			});
+			modelBuilder.Entity<CashMethod>();
+
+			modelBuilder.Entity<CardMethod>();
 
 			/*modelBuilder.Entity<State>(entity =>
 			{
