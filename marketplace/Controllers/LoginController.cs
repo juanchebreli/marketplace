@@ -7,11 +7,10 @@ using marketplace.Models;
 using marketplace.DTO.UserDTO;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using MimeKit;
 using System.Security.Authentication;
 using marketplace.Services;
+using marketplace.Helpers.Interfaces;
 
 namespace marketplace.Controllers
 {
@@ -22,16 +21,20 @@ namespace marketplace.Controllers
         private readonly IConfiguration _config;
 
         private readonly IUserService _userService;
+		private readonly IJwtMiddleware _jwtMiddleware;
 
-        private readonly JWT _JWT;
+		private readonly JWT _JWT;
 
 
-        public LoginController(IOptions<JWT> JWT, IConfiguration config, IUserService userService)
+        public LoginController(IOptions<JWT> JWT, IConfiguration config, IUserService userService,
+			IJwtMiddleware jwtMiddleware)
         {
             _JWT = JWT.Value;
             _config = config;
             _userService = userService;
-        }
+			_jwtMiddleware = jwtMiddleware;
+
+		}
 
         [HttpPost]
         [AllowAnonymous]
@@ -43,7 +46,7 @@ namespace marketplace.Controllers
                 UserLoginDTO user = _userService.AuthenticateUser<UserLoginDTO.MapperProfile>(login);
                 if (user != null)
                 {
-                    var tokenString = JwtMiddleware.GenerateJWTToken(user,_JWT,_config);
+                    var tokenString = _jwtMiddleware.GenerateJWTToken(user,_JWT,_config);
                     user.token = tokenString;
                     response = Ok(
                         user

@@ -4,6 +4,7 @@ using marketplace.DTO.UserDTO;
 using marketplace.Helpers;
 using marketplace.Models;
 using marketplace.Repositories;
+using marketplace.Helpers.Interfaces;
 
 namespace marketplace.Services
 {
@@ -24,18 +25,30 @@ namespace marketplace.Services
 	{
 		private readonly IUserRepository _userRepository;
 		private readonly IConfiguration _configuration;
+		private readonly ICryptoEngine _cryptoEngine;
 
-		public UserService(IUserRepository userRepository, IConfiguration configuration)
+		public UserService(IUserRepository userRepository, IConfiguration configuration, ICryptoEngine cryptoEngine)
 		{
 
 			_userRepository = userRepository;
 			_configuration = configuration;
+			_cryptoEngine = cryptoEngine;
 
 		}
 
 		public UserLoginDTO AuthenticateUser<TMapperProfile>(LoginDTO loginCredentials) where TMapperProfile : Profile, new()
 		{
-			return CustomMapper.Map<User, UserLoginDTO, TMapperProfile>(_userRepository.AuthenticateUser(loginCredentials));
+			User user = _userRepository.AuthenticateUser(loginCredentials);
+			if( user != null)
+			{
+				string key = _configuration.GetSection("Encrypt")["Key"];
+				string passwordDecrypt = _cryptoEngine.Decrypt(user.password, key);
+				if (passwordDecrypt == loginCredentials.password)
+				{
+					return CustomMapper.Map<User, UserLoginDTO, TMapperProfile>(user);
+				}
+			}
+			return null;
         }
 
 		public List<User> GetAll()
@@ -51,7 +64,7 @@ namespace marketplace.Services
 		public User Add(UserCreateDTO entity)
 		{
 			string key = _configuration.GetSection("Encrypt")["Key"];
-			entity.password = CryptoEngine.Encrypt(entity.password, key);
+			entity.password = _cryptoEngine.Encrypt(entity.password, key);
 			return _userRepository.Add<UserCreateDTO, UserCreateDTO.MapperProfile>(entity);
 		}
 

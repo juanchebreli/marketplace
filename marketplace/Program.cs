@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using marketplace.Models;
 using marketplace.WebSocket;
+using marketplace.Helpers.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +80,11 @@ builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
+
+// configure DI for application helpers
+builder.Services.AddScoped<ICryptoEngine, CryptoEngine>();
+builder.Services.AddScoped<IJwtMiddleware, JwtMiddleware>();
+
 
 //seed
 builder.Services.AddTransient<DataSeeder>();
