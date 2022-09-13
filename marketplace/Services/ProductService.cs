@@ -1,22 +1,11 @@
-﻿using marketplace.MappingConfiguration;
-using AutoMapper;
-using marketplace.DTO.ProductDTO;
-using marketplace.Helpers;
+﻿using marketplace.DTO.ProductDTO;
 using marketplace.Models;
-using marketplace.Repositories;
+using marketplace.Services.Interfaces;
+using marketplace.Repositories.Interfaces;
 
 namespace marketplace.Services
 {
-	public interface IProductService
-	{
-		List<Product> GetAll();
-		Product Get(int id);
-		Product Add(ProductCreateDTO entity);
-		Product Update(ProductUpdateDTO entity);
-		Product Update(Product entity);
-		List<string> Validations(string productName, int id);
-		void Delete(int id);
-	}
+	
 
 	public class ProductService : IProductService
 	{

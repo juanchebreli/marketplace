@@ -1,27 +1,14 @@
 ﻿using marketplace.MappingConfiguration;
-using AutoMapper;
 using marketplace.DTO.PurchaseDTO;
-using marketplace.Helpers;
 using marketplace.Models;
-using marketplace.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
 using marketplace.Context;
 using marketplace.DTO.PaymentMethodDTO;
+using marketplace.Services.Interfaces;
+using marketplace.Repositories.Interfaces;
 
 namespace marketplace.Services
 {
-	public interface IPurchaseService
-	{
-		List<Purchase> GetAll();
-		Purchase Get(int id);
-		Purchase Add(PurchaseCreateDTO entity);
-		Purchase Update(PurchaseUpdateDTO entity);
-		Purchase Update(Purchase entity);
-		List<string> Validations(int Userid, int ProductOnSaleid,int paymentMethod, int id);
-		void Delete(int id);
-		PaymentMethod CreatePaymentMethod(PaymentMethodCreateDTO paymentMethodCreateDTO);
-	}
-
 	public class PurchaseService : IPurchaseService
 	{
 		private readonly IPurchaseRepository _purchaseRepository;

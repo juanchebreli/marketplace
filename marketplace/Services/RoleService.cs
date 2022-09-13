@@ -1,22 +1,11 @@
-﻿using marketplace.MappingConfiguration;
-using AutoMapper;
-using marketplace.DTO.RoleDTO;
-using marketplace.Helpers;
+﻿using marketplace.DTO.RoleDTO;
 using marketplace.Models;
-using marketplace.Repositories;
+using marketplace.Services.Interfaces;
+using marketplace.Repositories.Interfaces;
 
 namespace marketplace.Services
 {
-	public interface IRoleService
-	{
-		List<Role> GetAll();
-		Role Get(int id);
-		Role Add(RoleCreateDTO entity);
-		Role Update(RoleUpdateDTO entity);
-		Role Update(Role entity);
-		List<string> Validations(string roleName, int id);
-		void Delete(int id);
-	}
+	
 
 	public class RoleService : IRoleService
 	{

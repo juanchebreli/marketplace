@@ -1,22 +1,11 @@
 ﻿using marketplace.Context;
 using marketplace.DTO.UserDTO;
 using marketplace.Models;
+using marketplace.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace marketplace.Repositories
 {
-    public interface IUserRepository : IGenericRepository<User>
-    {
-        User AuthenticateUser(LoginDTO loginCredentials);
-
-        bool FreeUsername(string username, int id);
-        bool FreeEmail(string email, int id);
-
-        User GetByEmail(string email);
-
-        List<User> GetAll();
-
-    }
     public class UserRepository : GenericRepository<User, AppDbContext>, IUserRepository
     {
         readonly AppDbContext AppDbContext;

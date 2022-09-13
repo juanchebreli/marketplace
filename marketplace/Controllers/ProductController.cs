@@ -1,6 +1,6 @@
 ﻿using marketplace.DTO.ProductDTO;
 using marketplace.Models;
-using marketplace.Services;
+using marketplace.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

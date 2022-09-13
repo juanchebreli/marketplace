@@ -1,16 +1,9 @@
 ﻿using marketplace.Context;
-using marketplace.DTO.UserDTO;
-using marketplace.Helpers;
 using marketplace.Models;
+using marketplace.Repositories.Interfaces;
 
 namespace marketplace.Repositories
 {
-	public interface IPermissionRepository : IGenericRepository<Permission>
-	{
-		public List<Permission> GetAll();
-		public bool FreeName(string name, int id);
-
-	}
 	public class PermissionRepository : GenericRepository<Permission, AppDbContext>, IPermissionRepository
 	{
 		readonly AppDbContext AppDbContext;

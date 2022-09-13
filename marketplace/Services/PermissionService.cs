@@ -1,22 +1,11 @@
-﻿using marketplace.MappingConfiguration;
-using AutoMapper;
-using marketplace.DTO.PermissionDTO;
-using marketplace.Helpers;
+﻿using marketplace.DTO.PermissionDTO;
 using marketplace.Models;
-using marketplace.Repositories;
+using marketplace.Services.Interfaces;
+using marketplace.Repositories.Interfaces;
 
 namespace marketplace.Services
 {
-	public interface IPermissionService
-	{
-		List<Permission> GetAll();
-		Permission Get(int id);
-		Permission Add(PermissionCreateDTO entity);
-		Permission Update(PermissionUpdateDTO entity);
-		Permission Update(Permission entity);
-		List<string> Validations(string permissionName, int id);
-		void Delete(int id);
-	}
+	
 
 	public class PermissionService : IPermissionService
 	{

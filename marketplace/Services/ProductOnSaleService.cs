@@ -1,26 +1,13 @@
 ﻿using marketplace.MappingConfiguration;
-using AutoMapper;
 using marketplace.DTO.ProductOnSaleDTO;
-using marketplace.Helpers;
 using marketplace.Models;
-using marketplace.Repositories;
 using Microsoft.AspNetCore.SignalR;
 using marketplace.WebSocket;
+using marketplace.Services.Interfaces;
+using marketplace.Repositories.Interfaces;
 
 namespace marketplace.Services
 {
-	public interface IProductOnSaleService
-	{
-		List<ProductOnSale> GetAll();
-		ProductOnSale Get(int id);
-		ProductOnSale Add(ProductOnSaleCreateDTO entity);
-		ProductOnSale Update(ProductOnSaleUpdateDTO entity);
-		ProductOnSale Update(ProductOnSale entity);
-		List<string> Validations(int id);
-		void Delete(int id);
-		Task SendNewOffer(ProductOnSale entity);
-	}
-
 	public class ProductOnSaleService : IProductOnSaleService
 	{
 		private readonly IProductOnSaleRepository _productOnSaleRepository;

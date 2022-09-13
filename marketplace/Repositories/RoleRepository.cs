@@ -1,16 +1,9 @@
 ﻿using marketplace.Context;
-using marketplace.DTO.UserDTO;
-using marketplace.Helpers;
 using marketplace.Models;
+using marketplace.Repositories.Interfaces;
 
 namespace marketplace.Repositories
 {
-	public interface IRoleRepository : IGenericRepository<Role>
-	{
-		public List<Role> GetAll();
-		public bool FreeName(string name, int id);
-
-	}
 	public class RoleRepository : GenericRepository<Role, AppDbContext>, IRoleRepository
 	{
 		readonly AppDbContext AppDbContext;

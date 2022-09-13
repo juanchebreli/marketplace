@@ -1,16 +1,9 @@
 ﻿using marketplace.Context;
-using marketplace.DTO.UserDTO;
-using marketplace.Helpers;
 using marketplace.Models;
+using marketplace.Repositories.Interfaces;
 
 namespace marketplace.Repositories
 {
-	public interface IPurchaseRepository : IGenericRepository<Purchase>
-	{
-		List<Purchase> GetAll();
-		Purchase GetByProductOnSale(int ProductOnSaleId);
-
-	}
 	public class PurchaseRepository : GenericRepository<Purchase, AppDbContext>, IPurchaseRepository
 	{
 		readonly AppDbContext AppDbContext;

@@ -1,26 +1,13 @@
 ﻿using marketplace.MappingConfiguration;
 using AutoMapper;
 using marketplace.DTO.UserDTO;
-using marketplace.Helpers;
 using marketplace.Models;
-using marketplace.Repositories;
 using marketplace.Helpers.Interfaces;
+using marketplace.Repositories.Interfaces;
+using marketplace.Services.Interfaces;
 
 namespace marketplace.Services
 {
-    public interface IUserService
-    {
-		UserLoginDTO AuthenticateUser<TMapperProfile>(LoginDTO loginCredentials) where TMapperProfile : Profile, new();
-		List<User> GetAll();
-		User Get(int id);
-		User Add(UserCreateDTO entity);
-		User Update(UserUpdateDTO entity);
-		User Update(User entity);
-		List<string> Validations(string email, int id, string username);
-		User GetByEmail(string email);
-		void Delete(int id);
-	}
-
 	public class UserService : IUserService
 	{
 		private readonly IUserRepository _userRepository;

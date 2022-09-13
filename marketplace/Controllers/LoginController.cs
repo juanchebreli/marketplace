@@ -5,12 +5,10 @@ using marketplace.Helpers;
 using Newtonsoft.Json.Linq;
 using marketplace.Models;
 using marketplace.DTO.UserDTO;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 using MimeKit;
 using System.Security.Authentication;
-using marketplace.Services;
 using marketplace.Helpers.Interfaces;
+using marketplace.Services.Interfaces;
 
 namespace marketplace.Controllers
 {

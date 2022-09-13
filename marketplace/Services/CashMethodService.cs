@@ -1,21 +1,12 @@
 ﻿using marketplace.MappingConfiguration;
 using marketplace.DTO.PaymentMethodDTO.CashMethodDTO;
-using marketplace.Helpers;
 using marketplace.Models;
-using marketplace.Repositories;
 using marketplace.DTO.PaymentMethodDTO;
+using marketplace.Services.Interfaces;
+using marketplace.Repositories.Interfaces;
 
 namespace marketplace.Services
 {
-	public interface ICashMethodService
-	{
-		List<PaymentMethod> GetAll();
-		PaymentMethod Get(int id);
-		CashMethod Add(PaymentMethodCreateDTO entity);
-		CashMethod Update(CashMethodUpdateDTO entity);
-		void Delete(int id);
-	}
-
 	public class CashMethodService : ICashMethodService
 	{
 		private readonly IPaymentRepository _paymentRepository;
