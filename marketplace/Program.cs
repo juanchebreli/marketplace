@@ -10,6 +10,7 @@ using marketplace.WebSocket;
 using marketplace.Helpers.Interfaces;
 using marketplace.Services.Interfaces;
 using marketplace.Repositories.Interfaces;
+using marketplace.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,29 +62,13 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("ConnectionString")));
 
 // configure DI for application services
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IProductOnSaleService, ProductOnSaleService>();
-builder.Services.AddScoped<ICashMethodService, CashMethodService>();
-builder.Services.AddScoped<ICardMethodService, CardMethodService>();
-builder.Services.AddScoped<IPurchaseService, PurchaseService>();
-builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<IPermissionService, PermissionService>();
-
-
+builder.Services.AddServices();
 
 // configure DI for application repositories
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IProductOnSaleRepository, ProductOnSaleRepository>();
-builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
+builder.Services.AddRepositories();
 
 // configure DI for application helpers
-builder.Services.AddScoped<ICryptoEngine, CryptoEngine>();
-builder.Services.AddScoped<IJwtMiddleware, JwtMiddleware>();
+builder.Services.AddHelpers();
 
 
 //seed
@@ -94,6 +79,9 @@ builder.Services.AddSignalR();
 
 
 var app = builder.Build();
+
+// configure Exception middleware
+app.ConfigureExceptionHandler();
 
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
 	SeedData(app);
