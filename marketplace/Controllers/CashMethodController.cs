@@ -22,81 +22,41 @@ namespace marketplace.Controllers
 
 
 		[AllowAnonymous]
-		[HttpGet("all")]
+		[HttpGet]
 		public IActionResult All()
 		{
-			try
-			{
-				List<PaymentMethod> CashMethods = _CashMethodService.GetAll();
-				return Ok(CashMethods);
-			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
+			List<PaymentMethod> CashMethods = _CashMethodService.GetAll();
+			return Ok(CashMethods);
 		}
 
 
 		[HttpGet("{id}")]
 		public IActionResult ById(int id)
 		{
-			try
-			{
-				PaymentMethod CashMethod = _CashMethodService.Get(id);
-				return Ok(CashMethod);
-			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
+			PaymentMethod CashMethod = _CashMethodService.Get(id);
+			return Ok(CashMethod);
 		}
 
 
 
-		[HttpPut("edit")]
+		[HttpPut]
 		public IActionResult Editar([FromBody] CashMethodUpdateDTO entity)
 		{
-			try
+			if (!ModelState.IsValid)
 			{
-				if (!ModelState.IsValid)
-				{
-					return BadRequest("Invalid data.");
-				}
-
-				_CashMethodService.Update(entity);
-				return Ok();
-
+				return BadRequest("Invalid data.");
 			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
+
+			_CashMethodService.Update(entity);
+			return Ok();
 		}
 
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
-			try
-			{
-				_CashMethodService.Delete(id);
-				return Ok();
-			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
+
+			_CashMethodService.Delete(id);
+			return Ok();
 		}
 	}
 }

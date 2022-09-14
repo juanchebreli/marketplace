@@ -22,120 +22,71 @@ namespace marketplace.Controllers
         }
 
 
-        [HttpGet("all")]
+        [HttpGet]
         public IActionResult All()
         {
-            try
-            {
-                List<User> users= _userService.GetAll();
-                return Ok(users);
-            }
-            catch (Exception e)
-            {
-                if (_configuration.GetSection("Environment")["Production"] == "true")
-                    return StatusCode(500, "Server error, contact Technical Support");
-                else
-                    return StatusCode(500, "Internal server error." + e);
-            }
+            List<User> users= _userService.GetAll();
+            return Ok(users);
         }
 
 
         [HttpGet("{id}")]
         public IActionResult ById(int id)
         {
-            try
-            {
-                User user = _userService.Get(id);
-                return Ok(user);
-            }
-            catch (Exception e)
-            {
-                if (_configuration.GetSection("Environment")["Production"] == "true")
-                    return StatusCode(500, "Server error, contact Technical Support");
-                else
-                    return StatusCode(500, "Internal server error." + e);
-            }
+            User user = _userService.Get(id);
+            return Ok(user);
         }
 
 		
-        [HttpPost("create")]
+        [HttpPost]
         public IActionResult Crear([FromBody] UserCreateDTO entity)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest("Invalid data.");
-                }
-                List<string> errors = _userService.Validations(entity.email, 0, entity.username);
-                if (!errors.Any())
-                {
-                    User user = _userService.Add(entity);
-                    return Ok(user);
-                }
-                else
-                {
-                    var errors_json = JsonConvert.SerializeObject(errors);
-                    return StatusCode(500, errors_json);
-                }
+                return BadRequest("Invalid data.");
             }
-            catch (Exception e)
+
+            List<string> errors = _userService.Validations(entity.email, 0, entity.username);
+            if (!errors.Any())
             {
-                if (_configuration.GetSection("Environment")["Production"] == "true")
-                    return StatusCode(500, "Server error, contact Technical Support");
-                else
-                    return StatusCode(500, "Internal server error." + e);
+                User user = _userService.Add(entity);
+                return Ok(user);
+            }
+            else
+            {
+                var errors_json = JsonConvert.SerializeObject(errors);
+                return StatusCode(500, errors_json);
             }
         }
 
 
         [Authorize(Roles = "Admin,Moderador")]
-        [HttpPut("edit")]
+        [HttpPut]
         public IActionResult Editar([FromBody] UserUpdateDTO entity)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest("Invalid data.");
-                }
-
-                List<string> errors = _userService.Validations(entity.email, entity.id, entity.username);
-                if (!errors.Any())
-                {
-                    _userService.Update(entity);
-                    return Ok();
-                }
-                else
-                {
-                    var errors_json = JsonConvert.SerializeObject(errors);
-                    return StatusCode(500, errors_json);
-                }
+                return BadRequest("Invalid data.");
             }
-            catch (Exception e)
+
+            List<string> errors = _userService.Validations(entity.email, entity.id, entity.username);
+            if (!errors.Any())
             {
-                if (_configuration.GetSection("Environment")["Production"] == "true")
-                    return StatusCode(500, "Server error, contact Technical Support");
-                else
-                    return StatusCode(500, "Internal server error." + e);
+                _userService.Update(entity);
+                return Ok();
+            }
+            else
+            {
+                var errors_json = JsonConvert.SerializeObject(errors);
+                return StatusCode(500, errors_json);
             }
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            try
-            {
-                 _userService.Delete(id);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                if (_configuration.GetSection("Environment")["Production"] == "true")
-                    return StatusCode(500, "Server error, contact Technical Support");
-                else
-                    return StatusCode(500, "Internal server error." + e);
-            }
+            _userService.Delete(id);
+            return Ok();
         }
     }
 }

@@ -22,119 +22,71 @@ namespace marketplace.Controllers
 		}
 
 
-		[HttpGet("all")]
+		[HttpGet]
 		public IActionResult All()
 		{
-			try
-			{
-				List<Role> roles = _roleService.GetAll();
-				return Ok(roles);
-			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
+			List<Role> roles = _roleService.GetAll();
+			return Ok(roles);
 		}
 
 
 		[HttpGet("{id}")]
 		public IActionResult ById(int id)
 		{
-			try
-			{
-				Role role = _roleService.Get(id);
-				return Ok(role);
-			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
+			Role role = _roleService.Get(id);
+			return Ok(role);
 		}
 
-		[HttpPost("create")]
+		[HttpPost]
 		public IActionResult Crear([FromBody] RoleCreateDTO entity)
 		{
-			try
+			if (!ModelState.IsValid)
 			{
-				if (!ModelState.IsValid)
-				{
-					return BadRequest("Invalid data.");
-				}
-				List<string> errors = _roleService.Validations(entity.name, 0);
-				if (!errors.Any())
-				{
-					Role role = _roleService.Add(entity);
-					return Ok(role);
-				}
-				else
-				{
-					var errors_json = JsonConvert.SerializeObject(errors);
-					return StatusCode(500, errors_json);
-				}
+				return BadRequest("Invalid data.");
 			}
-			catch (Exception e)
+
+			List<string> errors = _roleService.Validations(entity.name, 0);
+			if (!errors.Any())
 			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
+				Role role = _roleService.Add(entity);
+				return Ok(role);
+			}
+			else
+			{
+				var errors_json = JsonConvert.SerializeObject(errors);
+				return StatusCode(500, errors_json);
 			}
 		}
 
 
 		[Authorize(Roles = "Admin,Moderador")]
-		[HttpPut("edit")]
+		[HttpPut]
 		public IActionResult Editar([FromBody] RoleUpdateDTO entity)
 		{
-			try
+			if (!ModelState.IsValid)
 			{
-				if (!ModelState.IsValid)
-				{
-					return BadRequest("Invalid data.");
-				}
-
-				List<string> errors = _roleService.Validations(entity.name, entity.id);
-				if (!errors.Any())
-				{
-					_roleService.Update(entity);
-					return Ok();
-				}
-				else
-				{
-					var errors_json = JsonConvert.SerializeObject(errors);
-					return StatusCode(500, errors_json);
-				}
+				return BadRequest("Invalid data.");
 			}
-			catch (Exception e)
+
+			List<string> errors = _roleService.Validations(entity.name, entity.id);
+			if (!errors.Any())
 			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
+				_roleService.Update(entity);
+				return Ok();
+			}
+			else
+			{
+				var errors_json = JsonConvert.SerializeObject(errors);
+				return StatusCode(500, errors_json);
 			}
 		}
 
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
-			try
-			{
-				_roleService.Delete(id);
-				return Ok();
-			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
+			_roleService.Delete(id);
+			return Ok();
 		}
+
 	}
 }

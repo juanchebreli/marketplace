@@ -22,68 +22,38 @@ namespace marketplace.Controllers
 		}
 
 
-		[HttpGet("all")]
+		[HttpGet]
 		public IActionResult All()
 		{
-			try
-			{
-				List<Product> products = _productService.GetAll();
-				return Ok(products);
-			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
+			List<Product> products = _productService.GetAll();
+			return Ok(products);
 		}
 
 
 		[HttpGet("{id}")]
 		public IActionResult ById(int id)
 		{
-			try
-			{
-				Product product = _productService.Get(id);
-				return Ok(product);
-			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
+			Product product = _productService.Get(id);
+			return Ok(product);
 		}
 
-		[HttpPost("create")]
+		[HttpPost]
 		public IActionResult Crear([FromBody] ProductCreateDTO entity)
 		{
-			try
+			if (!ModelState.IsValid)
 			{
-				if (!ModelState.IsValid)
-				{
-					return BadRequest("Invalid data.");
-				}
-				List<string> errors = _productService.Validations(entity.name, 0);
-				if (!errors.Any())
-				{
-					Product product = _productService.Add(entity);
-					return Ok(product);
-				}
-				else
-				{
-					var errors_json = JsonConvert.SerializeObject(errors);
-					return StatusCode(500, errors_json);
-				}
+				return BadRequest("Invalid data.");
 			}
-			catch (Exception e)
+			List<string> errors = _productService.Validations(entity.name, 0);
+			if (!errors.Any())
 			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
+				Product product = _productService.Add(entity);
+				return Ok(product);
+			}
+			else
+			{
+				var errors_json = JsonConvert.SerializeObject(errors);
+				return StatusCode(500, errors_json);
 			}
 		}
 
@@ -92,49 +62,29 @@ namespace marketplace.Controllers
 		[HttpPut("edit")]
 		public IActionResult Editar([FromBody] ProductUpdateDTO entity)
 		{
-			try
+			if (!ModelState.IsValid)
 			{
-				if (!ModelState.IsValid)
-				{
-					return BadRequest("Invalid data.");
-				}
-
-				List<string> errors = _productService.Validations(entity.name , entity.id);
-				if (!errors.Any())
-				{
-					_productService.Update(entity);
-					return Ok();
-				}
-				else
-				{
-					var errors_json = JsonConvert.SerializeObject(errors);
-					return StatusCode(500, errors_json);
-				}
+				return BadRequest("Invalid data.");
 			}
-			catch (Exception e)
+
+			List<string> errors = _productService.Validations(entity.name , entity.id);
+			if (!errors.Any())
 			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
+				_productService.Update(entity);
+				return Ok();
+			}
+			else
+			{
+				var errors_json = JsonConvert.SerializeObject(errors);
+				return StatusCode(500, errors_json);
 			}
 		}
 
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
-			try
-			{
-				_productService.Delete(id);
-				return Ok();
-			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
+			_productService.Delete(id);
+			return Ok();
 		}
 	}
 }

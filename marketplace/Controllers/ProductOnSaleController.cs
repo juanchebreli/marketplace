@@ -22,124 +22,75 @@ namespace marketplace.Controllers
 		}
 
 
-		[HttpGet("all")]
+		[HttpGet]
 		public IActionResult All()
 		{
-			try
-			{
-				List<ProductOnSale> productOnSales = _productOnSaleService.GetAll();
-				return Ok(productOnSales);
-			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
+			List<ProductOnSale> productOnSales = _productOnSaleService.GetAll();
+			return Ok(productOnSales);
 		}
 
 
 		[HttpGet("{id}")]
 		public IActionResult ById(int id)
 		{
-			try
-			{
-				ProductOnSale productOnSale = _productOnSaleService.Get(id);
-				return Ok(productOnSale);
-			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
+			ProductOnSale productOnSale = _productOnSaleService.Get(id);
+			return Ok(productOnSale);
 		}
 
 
-		[HttpPost("create")]
+		[HttpPost]
 		public async Task<IActionResult> Crear([FromBody] ProductOnSaleCreateDTO entity)
 		{
-			try
+			if (!ModelState.IsValid)
 			{
-				if (!ModelState.IsValid)
-				{
-					return BadRequest("Invalid data.");
-				}
-				List<string> errors = _productOnSaleService.Validations(0);
-				if (!errors.Any())
-				{
-					ProductOnSale productOnSale = _productOnSaleService.Add(entity);
-					if (productOnSale.offer)
-					{
-						await _productOnSaleService.SendNewOffer(productOnSale);
-					}
-					return Ok(productOnSale);
-				}
-				else
-				{
-					var errors_json = JsonConvert.SerializeObject(errors);
-					return StatusCode(500, errors_json);
-				}
+				return BadRequest("Invalid data.");
 			}
-			catch (Exception e)
+
+			List<string> errors = _productOnSaleService.Validations(0);
+			if (!errors.Any())
 			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
+				ProductOnSale productOnSale = _productOnSaleService.Add(entity);
+				if (productOnSale.offer)
+				{
+					await _productOnSaleService.SendNewOffer(productOnSale);
+				}
+				return Ok(productOnSale);
+			}
+			else
+			{
+				var errors_json = JsonConvert.SerializeObject(errors);
+				return StatusCode(500, errors_json);
 			}
 		}
 
 
 		[Authorize(Roles = "Admin,Moderador")]
-		[HttpPut("edit")]
+		[HttpPut]
 		public IActionResult Editar([FromBody] ProductOnSaleUpdateDTO entity)
 		{
-			try
+			if (!ModelState.IsValid)
 			{
-				if (!ModelState.IsValid)
-				{
-					return BadRequest("Invalid data.");
-				}
-
-				List<string> errors = _productOnSaleService.Validations(entity.id);
-				if (!errors.Any())
-				{
-					_productOnSaleService.Update(entity);
-					return Ok();
-				}
-				else
-				{
-					var errors_json = JsonConvert.SerializeObject(errors);
-					return StatusCode(500, errors_json);
-				}
+				return BadRequest("Invalid data.");
 			}
-			catch (Exception e)
+
+			List<string> errors = _productOnSaleService.Validations(entity.id);
+			if (!errors.Any())
 			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
+				_productOnSaleService.Update(entity);
+				return Ok();
+			}
+			else
+			{
+				var errors_json = JsonConvert.SerializeObject(errors);
+				return StatusCode(500, errors_json);
 			}
 		}
 
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
-			try
-			{
-				_productOnSaleService.Delete(id);
-				return Ok();
-			}
-			catch (Exception e)
-			{
-				if (_configuration.GetSection("Environment")["Production"] == "true")
-					return StatusCode(500, "Server error, contact Technical Support");
-				else
-					return StatusCode(500, "Internal server error." + e);
-			}
+			_productOnSaleService.Delete(id);
+			return Ok();
 		}
 	}
 }
