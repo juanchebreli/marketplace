@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using marketplace.Helpers.Exceptions.Implements;
 using marketplace.Helpers.Enums;
 using marketplace.Helpers.Factory;
+using System.Text;
 
 namespace marketplace.Services
 {
@@ -37,12 +38,16 @@ namespace marketplace.Services
 
 		public List<Purchase> GetAll()
 		{
-			return _purchaseRepository.GetAll();
+			List<Purchase> purchases = _purchaseRepository.GetAll();
+			if (purchases.Count == 0) throw new NoContentException("Don't have a purchases");
+			return purchases;
 		}
 
 		public Purchase Get(int id)
 		{
-			return _purchaseRepository.Get(id);
+			Purchase purchase = _purchaseRepository.Get(id);
+			if (purchase == null) throw new NotFoundException(new StringBuilder("Not found a purchase with id: {0}", id).ToString());
+			return purchase;
 		}
 
 		public Purchase Add(PurchaseCreateDTO entity)
@@ -61,7 +66,7 @@ namespace marketplace.Services
 				catch (Exception ex)
 				{
 					transaction.Rollback();
-					return null;
+					throw new InternalServerErrorException("Internal server error");
 				}
 			}
 		}
@@ -75,6 +80,7 @@ namespace marketplace.Services
 		{
 			return _purchaseRepository.Update(entity);
 		}
+
 		public void Validate(int Userid, int ProductOnSaleid, string paymentMethod, int id)
 		{
 			List<string> errors = new List<string>();
@@ -98,6 +104,8 @@ namespace marketplace.Services
 		public void Delete(int id)
 		{
 			Purchase purchase = _purchaseRepository.Get(id);
+			if (purchase == null) throw new NotFoundException(new StringBuilder("Not found a purchase with id: {0}", id).ToString());
+
 			purchase.deleted = true;
 			_purchaseRepository.Update(purchase);
 		}

@@ -4,6 +4,7 @@ using marketplace.Services.Interfaces;
 using marketplace.Repositories.Interfaces;
 using Newtonsoft.Json;
 using marketplace.Helpers.Exceptions.Implements;
+using System.Text;
 
 namespace marketplace.Services
 {
@@ -24,12 +25,16 @@ namespace marketplace.Services
 
 		public List<Product> GetAll()
 		{
-			return _productRepository.GetAll();
+			List<Product> products =_productRepository.GetAll();
+			if (products.Count == 0) throw new NoContentException("Don't have a products");
+			return products;
 		}
 
 		public Product Get(int id)
 		{
-			return _productRepository.Get(id);
+			Product product = _productRepository.Get(id);
+			if (product == null) throw new NotFoundException(new StringBuilder("Not found a product with id: {0}", id).ToString());
+			return product;
 		}
 
 		public Product Add(ProductCreateDTO entity)
@@ -63,6 +68,8 @@ namespace marketplace.Services
 		public void Delete(int id)
 		{
 			Product product = _productRepository.Get(id);
+			if (product == null) throw new NotFoundException(new StringBuilder("Not found a product with id: {0}", id).ToString());
+
 			product.deleted = true;
 			_productRepository.Update(product);
 		}

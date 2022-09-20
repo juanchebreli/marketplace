@@ -4,6 +4,7 @@ using marketplace.Services.Interfaces;
 using marketplace.Repositories.Interfaces;
 using Newtonsoft.Json;
 using marketplace.Helpers.Exceptions.Implements;
+using System.Text;
 
 namespace marketplace.Services
 {
@@ -24,12 +25,16 @@ namespace marketplace.Services
 
 		public List<Role> GetAll()
 		{
-			return _roleRepository.GetAll();
+			List<Role> roles = _roleRepository.GetAll();
+			if (roles.Count == 0) throw new NoContentException("Don't have a roles");
+			return roles;
 		}
 
 		public Role Get(int id)
 		{
-			return _roleRepository.Get(id);
+			Role role = _roleRepository.Get(id);
+			if (role == null) throw new NotFoundException(new StringBuilder("Not found a role with id: {0}", id).ToString());
+			return role;
 		}
 
 		public Role Add(RoleCreateDTO entity)
@@ -63,6 +68,8 @@ namespace marketplace.Services
 		public void Delete(int id)
 		{
 			Role role = _roleRepository.Get(id);
+			if (role == null) throw new NotFoundException(new StringBuilder("Not found a role with id: {0}", id).ToString());
+
 			role.deleted = true;
 			_roleRepository.Update(role);
 		}

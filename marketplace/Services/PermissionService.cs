@@ -65,6 +65,8 @@ namespace marketplace.Services
 		public void Delete(int id)
 		{
 			Permission permission = _permissionRepository.Get(id);
+			if (permission == null) throw new NotFoundException(new StringBuilder("Not found a permission with id: {0}", id).ToString());
+
 			permission.deleted = true;
 			_permissionRepository.Update(permission);
 		}

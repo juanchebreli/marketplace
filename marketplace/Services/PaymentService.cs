@@ -74,6 +74,8 @@ namespace marketplace.Services
 		public void Delete(int id)
 		{
 			PaymentMethod payment = _paymentRepository.Get(id);
+			if (payment == null) throw new NotFoundException(new StringBuilder("Not found a payment with id: {0}", id).ToString());
+
 			payment.deleted = true;
 			_paymentRepository.Update(payment);
 		}

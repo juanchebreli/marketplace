@@ -7,6 +7,7 @@ using marketplace.Repositories.Interfaces;
 using marketplace.Services.Interfaces;
 using Newtonsoft.Json;
 using marketplace.Helpers.Exceptions.Implements;
+using System.Text;
 
 namespace marketplace.Services
 {
@@ -28,26 +29,30 @@ namespace marketplace.Services
 		public UserLoginDTO AuthenticateUser<TMapperProfile>(LoginDTO loginCredentials) where TMapperProfile : Profile, new()
 		{
 			User user = _userRepository.AuthenticateUser(loginCredentials);
-			if( user != null)
+			if(user == null) throw new UnauthorizedException("Unauthorized");
+
+			string key = _configuration.GetSection("Encrypt")["Key"];
+			string passwordDecrypt = _cryptoEngine.Decrypt(user.password, key);
+			if (passwordDecrypt == loginCredentials.password)
 			{
-				string key = _configuration.GetSection("Encrypt")["Key"];
-				string passwordDecrypt = _cryptoEngine.Decrypt(user.password, key);
-				if (passwordDecrypt == loginCredentials.password)
-				{
-					return CustomMapper.Map<User, UserLoginDTO, TMapperProfile>(user);
-				}
+				return CustomMapper.Map<User, UserLoginDTO, TMapperProfile>(user);
 			}
-			return null;
-        }
+
+			throw new UnauthorizedException("Unauthorized");
+		}
 
 		public List<User> GetAll()
 		{
-			return _userRepository.GetAll();
+			List<User> users = _userRepository.GetAll();
+			if (users.Count == 0) throw new NoContentException("Don't have a users");
+			return users;
 		}
 
 		public User Get(int id)
 		{
-			return _userRepository.Get(id);
+			User user = _userRepository.Get(id);
+			if (user == null) throw new NotFoundException(new StringBuilder("Not found a user with id: {0}", id).ToString());
+			return user;
 		}
 
 		public User Add(UserCreateDTO entity)
@@ -83,12 +88,16 @@ namespace marketplace.Services
 
 		public User GetByEmail(string email)
         {
-			return _userRepository.GetByEmail(email);
-        }
+			User user = _userRepository.GetByEmail(email);
+			if (user == null) throw new NotFoundException(("Not found a user with email: " + email).ToString());
+			return user;
+		}
 
 		public void Delete(int id)
         {
 			User user = _userRepository.Get(id);
+			if (user == null) throw new NotFoundException(new StringBuilder("Not found a user with id: {0}", id).ToString());
+
 			user.deleted = true;
 			_userRepository.Update(user);
         }
