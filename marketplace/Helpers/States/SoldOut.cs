@@ -1,4 +1,6 @@
-﻿namespace marketplace.Models
+﻿using marketplace.Models;
+
+namespace marketplace.Helpers.States
 {
 	public class SoldOut : State
 	{
@@ -23,15 +25,9 @@
 			return false;
 		}
 
-		public override void DoFree(ProductOnSale entity)
-		{
+		public override void DoFree(ProductOnSale entity) { }
 
-		}
-
-		public override void DoReserved(ProductOnSale entity)
-		{
-
-		}
+		public override void DoReserved(ProductOnSale entity) { }
 
 		public override void DoSoldOut(ProductOnSale entity) { }
 	}

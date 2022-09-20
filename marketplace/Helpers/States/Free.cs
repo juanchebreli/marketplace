@@ -1,4 +1,7 @@
-﻿namespace marketplace.Models
+﻿using marketplace.Helpers.Enums;
+using marketplace.Models;
+
+namespace marketplace.Helpers.States
 {
 	public class Free : State
 	{
@@ -27,12 +30,12 @@
 
 		public override void DoReserved(ProductOnSale entity)
 		{
-
+			entity.state = (int)StatesEnum.RESERVED;
 		}
 
 		public override void DoSoldOut(ProductOnSale entity)
 		{
-
+			entity.state = (int)StatesEnum.SOLDOUT;
 		}
 	}
 }

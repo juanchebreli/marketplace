@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using marketplace.Helpers.Enums;
 using marketplace.Models;
 using System.ComponentModel.DataAnnotations;
 
@@ -27,7 +28,7 @@ namespace marketplace.DTO.ProductOnSaleDTO
 			{
 				perfil.CreateMap<ProductOnSale, ProductOnSaleCreateDTO>()
 					.ReverseMap()
-					.ForMember(dest => dest.state, opt => opt.MapFrom(src => State.FREE.id))
+					.ForMember(dest => dest.state, opt => opt.MapFrom(src => (int)StatesEnum.FREE))
 					.ForMember(dest => dest.deleted, opt => opt.MapFrom(src => false));
 
 			}

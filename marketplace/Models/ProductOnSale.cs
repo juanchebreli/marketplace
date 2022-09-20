@@ -1,4 +1,5 @@
-﻿using marketplace.Helpers;
+﻿using marketplace.Helpers.Factory;
+using marketplace.Helpers.States;
 using System.ComponentModel.DataAnnotations;
 
 namespace marketplace.Models
@@ -27,7 +28,7 @@ namespace marketplace.Models
 
 		public State GetState()
 		{
-			return State.GetState(this.state);
+			return StateFactory.GetState(state);
 		}
 
 
