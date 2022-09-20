@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using marketplace.Helpers.Enums;
 using marketplace.Models;
 
 namespace marketplace.DTO.PaymentMethodDTO.CashMethodDTO
@@ -17,7 +18,7 @@ namespace marketplace.DTO.PaymentMethodDTO.CashMethodDTO
 				perfil.CreateMap<CashMethod, CashMethodCreateDTO>()
 					.ReverseMap()
 					.ForMember(dest => dest.deleted, opt => opt.MapFrom(src => false))
-					.ForMember(dest => dest.type, opt => opt.MapFrom(src => PaymentMethod.CASH.type));
+					.ForMember(dest => dest.type, opt => opt.MapFrom(src => PaymentMethodsEnum.Cash));
 			}
 		}
 	}

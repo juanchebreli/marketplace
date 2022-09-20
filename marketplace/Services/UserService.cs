@@ -5,6 +5,8 @@ using marketplace.Models;
 using marketplace.Helpers.Interfaces;
 using marketplace.Repositories.Interfaces;
 using marketplace.Services.Interfaces;
+using Newtonsoft.Json;
+using marketplace.Helpers.Exceptions.Implements;
 
 namespace marketplace.Services
 {
@@ -64,14 +66,19 @@ namespace marketplace.Services
 		{
 			return _userRepository.Update(entity);
 		}
-		public List<string> Validations(string email, int id, string username)
+		public void Validate(string email, int id, string username)
 		{
 			List<string> errors = new List<string>();
-			if (!_userRepository.FreeEmail(email, id))
+			if (!this.FreeEmail(email, id))
 				errors.Add("That email is already being used by another user");
-			if (!_userRepository.FreeUsername(username, id))
+			if (!this.FreeUsername(username, id))
 				errors.Add("That username is already being used by another user");
-			return errors;
+
+			if (errors.Any())
+			{
+				string errosJson = JsonConvert.SerializeObject(errors);
+				throw new BadRequestException(errosJson);
+			}
 		}
 
 		public User GetByEmail(string email)
@@ -85,5 +92,27 @@ namespace marketplace.Services
 			user.deleted = true;
 			_userRepository.Update(user);
         }
+
+		#region private
+		public bool FreeEmail(string name, int id)
+		{
+			User entity = _userRepository.GetByEmail(name);
+
+			if (entity != null && entity.id == id)
+				return true;
+			else
+				return (entity == null);
+		}
+
+		public bool FreeUsername(string username, int id)
+		{
+			User entity = _userRepository.GetByName(username);
+
+			if (entity != null && entity.id == id)
+				return true;
+			else
+				return (entity == null);
+		}
+		#endregion
 	}
 }

@@ -13,7 +13,7 @@ namespace marketplace.DTO.PaymentMethodDTO
 		public string? cbu { get; set; }
 
 		[Required]
-		public int method { get; set; }
+		public string method { get; set; }
 
 		public class MapperProfileCash : Profile
 		{

@@ -2,6 +2,9 @@
 using marketplace.Models;
 using marketplace.Services.Interfaces;
 using marketplace.Repositories.Interfaces;
+using marketplace.Helpers.Exceptions.Implements;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace marketplace.Services
 {
@@ -10,24 +13,25 @@ namespace marketplace.Services
 	public class PermissionService : IPermissionService
 	{
 		private readonly IPermissionRepository _permissionRepository;
-		private readonly IConfiguration _configuration;
 
-		public PermissionService(IPermissionRepository permissionRepository, IConfiguration configuration)
+		public PermissionService(IPermissionRepository permissionRepository)
 		{
 
 			_permissionRepository = permissionRepository;
-			_configuration = configuration;
-
 		}
 
 		public List<Permission> GetAll()
 		{
-			return _permissionRepository.GetAll();
+			List<Permission> permissions = _permissionRepository.GetAll();
+			if (permissions.Count == 0) throw new NoContentException("Don't have a permissions");
+			return permissions;
 		}
 
 		public Permission Get(int id)
 		{
-			return _permissionRepository.Get(id);
+			Permission permission = _permissionRepository.Get(id);
+			if (permission == null) throw new NotFoundException(new StringBuilder("Not found a permission with id: {0}", id).ToString());
+			return permission;
 		}
 
 		public Permission Add(PermissionCreateDTO entity)
@@ -44,12 +48,17 @@ namespace marketplace.Services
 		{
 			return _permissionRepository.Update(entity);
 		}
-		public List<string> Validations(string permissiontname, int id)
+		public void Validate(string permissiontname, int id)
 		{
 			List<string> errors = new List<string>();
-			if (!_permissionRepository.FreeName(permissiontname, id))
+			if (!this.FreeName(permissiontname, id))
 				errors.Add("That name is already being used by another permission");
-			return errors;
+
+			if (errors.Any())
+			{
+				string errosJson = JsonConvert.SerializeObject(errors);
+				throw new BadRequestException(errosJson);
+			}
 		}
 
 
@@ -59,5 +68,17 @@ namespace marketplace.Services
 			permission.deleted = true;
 			_permissionRepository.Update(permission);
 		}
+
+		#region private
+		public bool FreeName(string name, int id)
+		{
+			Permission entity = _permissionRepository.GetByName(name);
+
+			if (entity != null && entity.id == id)
+				return true;
+			else
+				return (entity == null);
+		}
+		#endregion
 	}
 }

@@ -10,7 +10,7 @@ namespace marketplace.Services.Interfaces
 		Permission Add(PermissionCreateDTO entity);
 		Permission Update(PermissionUpdateDTO entity);
 		Permission Update(Permission entity);
-		List<string> Validations(string permissionName, int id);
+		void Validate(string permissionName, int id);
 		void Delete(int id);
 	}
 }

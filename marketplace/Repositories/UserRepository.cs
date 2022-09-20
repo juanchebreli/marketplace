@@ -24,28 +24,19 @@ namespace marketplace.Repositories
             return user;
         }
 
-        public bool FreeUsername(string usuario, int id)
-        {
-            User entity = AsNoTracking().FirstOrDefault(c => c.username == usuario && c.deleted == false);
-
-            if (entity != null && entity.id == id)
-                return true;
-            else
-                return (entity == null);
-        }
-
-        public bool FreeEmail(string email, int id)
-        {
-            User entity = AsNoTracking().FirstOrDefault(c => c.email == email && c.deleted == false);
-            if (entity != null && entity.id == id)
-                return true;
-            else
-                return (entity == null);
-        }
-
         public User GetByEmail(string email)
         {
-            return AsNoTracking().FirstOrDefault(c => c.email == email && c.deleted == false);
+            return AppDbContext.Users.FirstOrDefault(c => c.email == email && c.deleted == false);
+        }
+
+        public User GetByName(string name)
+        {
+            return AppDbContext.Users.FirstOrDefault(c => c.name == name && c.deleted == false);
+        }
+
+        public User GetByUsername(string username)
+        {
+            return AppDbContext.Users.FirstOrDefault(c => c.username == username && c.deleted == false);
         }
 
         public List<User> GetAll()

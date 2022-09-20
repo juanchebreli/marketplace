@@ -45,17 +45,10 @@ namespace marketplace.Controllers
 				return BadRequest("Invalid data.");
 			}
 
-			List<string> errors = _purchaseService.Validations(entity.Userid,entity.ProductOnSaleid,entity.paymentMethod.method, 0);
-			if (!errors.Any())
-			{
-				Purchase purchase = _purchaseService.Add(entity);
-				return Ok();
-			}
-			else
-			{
-				var errors_json = JsonConvert.SerializeObject(errors);
-				return StatusCode(500, errors_json);
-			}
+			_purchaseService.Validate(entity.Userid,entity.ProductOnSaleid,entity.paymentMethod.method, 0);
+
+			Purchase purchase = _purchaseService.Add(entity);
+			return Ok();
 		}
 
 
@@ -68,17 +61,10 @@ namespace marketplace.Controllers
 				return BadRequest("Invalid data.");
 			}
 
-			List<string> errors = _purchaseService.Validations(entity.Userid,entity.ProductOnSaleid,entity.PaymentMethodid, entity.id);
-			if (!errors.Any())
-			{
-				_purchaseService.Update(entity);
-				return Ok();
-			}
-			else
-			{
-				var errors_json = JsonConvert.SerializeObject(errors);
-				return StatusCode(500, errors_json);
-			}
+			_purchaseService.Validate(entity.Userid,entity.ProductOnSaleid,entity.PaymentMethod, entity.id);
+
+			_purchaseService.Update(entity);
+			return Ok();
 		}
 
 		[HttpDelete("{id}")]

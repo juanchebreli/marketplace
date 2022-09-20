@@ -19,14 +19,9 @@ namespace marketplace.Repositories
 			return products;
 		}
 
-		public bool FreeName(string name, int id)
+		public Product GetByName(string name)
 		{
-			Product entity = AsNoTracking().FirstOrDefault(c => c.name == name && c.deleted == false);
-
-			if (entity != null && entity.id == id)
-				return true;
-			else
-				return (entity == null);
+			return AppDbContext.Products.FirstOrDefault(c => c.name == name && c.deleted == false);
 		}
 
 	}

@@ -44,17 +44,11 @@ namespace marketplace.Controllers
 			{
 				return BadRequest("Invalid data.");
 			}
-			List<string> errors = _productService.Validations(entity.name, 0);
-			if (!errors.Any())
-			{
-				Product product = _productService.Add(entity);
-				return Ok(product);
-			}
-			else
-			{
-				var errors_json = JsonConvert.SerializeObject(errors);
-				return StatusCode(500, errors_json);
-			}
+
+			_productService.Validate(entity.name, 0);
+
+			Product product = _productService.Add(entity);
+			return Ok(product);
 		}
 
 
@@ -67,17 +61,10 @@ namespace marketplace.Controllers
 				return BadRequest("Invalid data.");
 			}
 
-			List<string> errors = _productService.Validations(entity.name , entity.id);
-			if (!errors.Any())
-			{
-				_productService.Update(entity);
-				return Ok();
-			}
-			else
-			{
-				var errors_json = JsonConvert.SerializeObject(errors);
-				return StatusCode(500, errors_json);
-			}
+			 _productService.Validate(entity.name , entity.id);
+
+			_productService.Update(entity);
+			return Ok();
 		}
 
 		[HttpDelete("{id}")]

@@ -1,5 +1,6 @@
 ﻿using marketplace.Helpers;
 using marketplace.Helpers.Exceptions;
+using marketplace.Helpers.Factory;
 using marketplace.Helpers.Interfaces;
 using marketplace.Repositories;
 using marketplace.Repositories.Interfaces;
@@ -15,8 +16,7 @@ namespace marketplace.Configurations
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductOnSaleService, ProductOnSaleService>();
-            services.AddScoped<ICashMethodService, CashMethodService>();
-            services.AddScoped<ICardMethodService, CardMethodService>();
+            services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IPurchaseService, PurchaseService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IPermissionService, PermissionService>();
@@ -37,6 +37,7 @@ namespace marketplace.Configurations
         {
             services.AddScoped<ICryptoEngine, CryptoEngine>();
             services.AddScoped<IJwtMiddleware, JwtMiddleware>();
+            services.AddScoped<PaymentMethodFactory>();
         }
 
         public static void ConfigureExceptionHandler(this IApplicationBuilder app)

@@ -3,9 +3,12 @@ using marketplace.DTO.PurchaseDTO;
 using marketplace.Models;
 using Microsoft.EntityFrameworkCore.Storage;
 using marketplace.Context;
-using marketplace.DTO.PaymentMethodDTO;
 using marketplace.Services.Interfaces;
 using marketplace.Repositories.Interfaces;
+using Newtonsoft.Json;
+using marketplace.Helpers.Exceptions.Implements;
+using marketplace.Helpers.Enums;
+using marketplace.Helpers.Factory;
 
 namespace marketplace.Services
 {
@@ -15,22 +18,19 @@ namespace marketplace.Services
 		private readonly IConfiguration _configuration;
 		private readonly IUserService _userService;
 		private readonly IProductOnSaleService _productOnSaleserService;
-		private readonly ICashMethodService _cashMethodService;
-		private readonly ICardMethodService _cardMethodService;
+		private readonly PaymentMethodFactory _paymentMethodFactory;
 		private readonly AppDbContext AppDbContext;
 
 
 		public PurchaseService(IPurchaseRepository purchaseRepository, IConfiguration configuration, IUserService userService,
-			IProductOnSaleService productOnSaleserService, ICashMethodService cashMethodService,
-			ICardMethodService cardMethodService, AppDbContext dbContext)
+			IProductOnSaleService productOnSaleserService, PaymentMethodFactory paymentMethodFactory, AppDbContext dbContext)
 		{
 
 			_purchaseRepository = purchaseRepository;
 			_configuration = configuration;
 			_userService = userService;
 			_productOnSaleserService = productOnSaleserService;
-			_cashMethodService = cashMethodService;
-			_cardMethodService = cardMethodService;
+			_paymentMethodFactory = paymentMethodFactory;
 			AppDbContext = dbContext;
 
 		}
@@ -51,7 +51,7 @@ namespace marketplace.Services
 			{
 				try
 				{
-					PaymentMethod paymentMethod = this.CreatePaymentMethod(entity.paymentMethod);
+					PaymentMethod paymentMethod = _paymentMethodFactory.CreatePaymentMethod(entity.paymentMethod);
 					entity.PaymentMethodid = paymentMethod.id;
 					Purchase purchase = CustomMapper.Map<PurchaseCreateDTO, Purchase, PurchaseCreateDTO.MapperProfile>(entity);
 					_purchaseRepository.Add(purchase);
@@ -75,7 +75,7 @@ namespace marketplace.Services
 		{
 			return _purchaseRepository.Update(entity);
 		}
-		public List<string> Validations(int Userid, int ProductOnSaleid, int paymentMethod, int id)
+		public void Validate(int Userid, int ProductOnSaleid, string paymentMethod, int id)
 		{
 			List<string> errors = new List<string>();
 			if (_userService.Get(Userid) == null)
@@ -84,9 +84,14 @@ namespace marketplace.Services
 				errors.Add("Product On Sale dont' exist");
 			if (_purchaseRepository.GetByProductOnSale(ProductOnSaleid) != null)
 				errors.Add("Product On Sale already have a sale");
-			if ((paymentMethod != PaymentMethod.CASH.id) && (paymentMethod != PaymentMethod.CARD.id))
+			if ((!PaymentMethodsEnum.Cash.ToString().Equals(paymentMethod)) && (!PaymentMethodsEnum.Card.ToString().Equals(paymentMethod)))
 				errors.Add("Payment method is invalid");
-			return errors;
+
+			if (errors.Any())
+			{
+				string errosJson = JsonConvert.SerializeObject(errors);
+				throw new BadRequestException(errosJson);
+			}
 		}
 
 
@@ -96,25 +101,6 @@ namespace marketplace.Services
 			purchase.deleted = true;
 			_purchaseRepository.Update(purchase);
 		}
-
-		public PaymentMethod CreatePaymentMethod(PaymentMethodCreateDTO paymentMethodCreateDTO)
-		{
-
-			// I don't use case becouse id needs to be constant
-			if (paymentMethodCreateDTO.method == PaymentMethod.CASH.id)
-			{
-				return _cashMethodService.Add(paymentMethodCreateDTO);
-			}
-			else
-			{
-				if (paymentMethodCreateDTO.method == PaymentMethod.CARD.id)
-				{
-					return _cardMethodService.Add(paymentMethodCreateDTO);
-				}
-			}
-			return null;
-		}
-
 
 	}
 }

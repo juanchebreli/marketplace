@@ -7,10 +7,9 @@ namespace marketplace.Repositories.Interfaces
     {
         User AuthenticateUser(LoginDTO loginCredentials);
 
-        bool FreeUsername(string username, int id);
-        bool FreeEmail(string email, int id);
-
         User GetByEmail(string email);
+        User GetByName(string name);
+        User GetByUsername(string username);
 
         List<User> GetAll();
 

@@ -19,14 +19,9 @@ namespace marketplace.Repositories
 			return roles;
 		}
 
-		public bool FreeName(string name, int id)
+		public Role GetByName(string name)
 		{
-			Role entity = AsNoTracking().FirstOrDefault(c => c.name == name && c.deleted == false);
-
-			if (entity != null && entity.id == id)
-				return true;
-			else
-				return (entity == null);
+			return AppDbContext.Roles.FirstOrDefault(c => c.name == name && c.deleted == false);
 		}
 
 	}

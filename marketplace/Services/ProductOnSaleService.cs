@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.SignalR;
 using marketplace.WebSocket;
 using marketplace.Services.Interfaces;
 using marketplace.Repositories.Interfaces;
+using Newtonsoft.Json;
+using marketplace.Helpers.Exceptions.Implements;
 
 namespace marketplace.Services
 {
@@ -47,10 +49,14 @@ namespace marketplace.Services
 		{
 			return _productOnSaleRepository.Update(entity);
 		}
-		public List<string> Validations(int id)
+		public void Validate(int id)
 		{
 			List<string> errors = new List<string>();
-			return errors;
+			if (errors.Any())
+			{
+				string errosJson = JsonConvert.SerializeObject(errors);
+				throw new BadRequestException(errosJson);
+			}
 		}
 
 

@@ -11,8 +11,7 @@ namespace marketplace.Services.Interfaces
 		Purchase Add(PurchaseCreateDTO entity);
 		Purchase Update(PurchaseUpdateDTO entity);
 		Purchase Update(Purchase entity);
-		List<string> Validations(int Userid, int ProductOnSaleid, int paymentMethod, int id);
+		void Validate(int Userid, int ProductOnSaleid, string paymentMethod, int id);
 		void Delete(int id);
-		PaymentMethod CreatePaymentMethod(PaymentMethodCreateDTO paymentMethodCreateDTO);
 	}
 }

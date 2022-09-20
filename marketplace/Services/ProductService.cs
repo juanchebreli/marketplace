@@ -2,6 +2,8 @@
 using marketplace.Models;
 using marketplace.Services.Interfaces;
 using marketplace.Repositories.Interfaces;
+using Newtonsoft.Json;
+using marketplace.Helpers.Exceptions.Implements;
 
 namespace marketplace.Services
 {
@@ -44,12 +46,17 @@ namespace marketplace.Services
 		{
 			return _productRepository.Update(entity);
 		}
-		public List<string> Validations(string productname, int id)
+		public void Validate(string productname, int id)
 		{
 			List<string> errors = new List<string>();
-			if (!_productRepository.FreeName(productname, id))
+			if (!this.FreeName(productname, id))
 				errors.Add("That name is already being used by another product");
-			return errors;
+
+			if (errors.Any())
+			{
+				string errosJson = JsonConvert.SerializeObject(errors);
+				throw new BadRequestException(errosJson);
+			}
 		}
 
 
@@ -59,5 +66,17 @@ namespace marketplace.Services
 			product.deleted = true;
 			_productRepository.Update(product);
 		}
+
+		#region private
+		public bool FreeName(string name, int id)
+		{
+			Product entity = _productRepository.GetByName(name);
+
+			if (entity != null && entity.id == id)
+				return true;
+			else
+				return (entity == null);
+		}
+		#endregion
 	}
 }

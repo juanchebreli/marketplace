@@ -1,6 +1,5 @@
 ﻿using marketplace.Context;
-using marketplace.DTO.UserDTO;
-using marketplace.Helpers;
+using marketplace.Helpers.Enums;
 using marketplace.Models;
 using marketplace.Repositories.Interfaces;
 
@@ -15,10 +14,16 @@ namespace marketplace.Repositories
 			AppDbContext = dbContext;
 		}
 
+		public List<PaymentMethod> GetAll()
+		{
+			List<PaymentMethod> paymentMethods = AppDbContext.PaymentMethods.Where(entity => entity.deleted == false).ToList();
+			return paymentMethods;
+		}
+
 		public List<PaymentMethod> GetAllCash()
 		{
-			List<PaymentMethod> cashes = AppDbContext.PaymentMethods.Where(entity => (entity.type == PaymentMethod.CASH.type) && (entity.deleted == false)).ToList();
-			return cashes;
+			List<PaymentMethod> cashMethods = AppDbContext.PaymentMethods.Where(entity => (entity.type == PaymentMethodsEnum.Cash.ToString()) && (entity.deleted == false)).ToList();
+			return cashMethods;
 		}
 
 		public CashMethod AddCashMethod(CashMethod cashMethod)
@@ -37,9 +42,8 @@ namespace marketplace.Repositories
 
 		public List<PaymentMethod> GetAllCard()
 		{
-			Type cash = typeof(CardMethod);
-			List<PaymentMethod> cashes = AppDbContext.PaymentMethods.Where(entity => (entity.type == PaymentMethod.CASH.type) && (entity.deleted == false)).ToList();
-			return cashes;
+			List<PaymentMethod> cardMethods = AppDbContext.PaymentMethods.Where(entity => (entity.type == PaymentMethodsEnum.Card.ToString()) && (entity.deleted == false)).ToList();
+			return cardMethods;
 		}
 
 		public CardMethod AddCardMethod(CardMethod cardMethod)

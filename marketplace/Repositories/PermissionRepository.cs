@@ -19,14 +19,9 @@ namespace marketplace.Repositories
 			return permissions;
 		}
 
-		public bool FreeName(string name, int id)
+		public Permission GetByName(string name)
 		{
-			Permission entity = AsNoTracking().FirstOrDefault(c => c.name == name && c.deleted == false);
-
-			if (entity != null && entity.id == id)
-				return true;
-			else
-				return (entity == null);
+			return AppDbContext.Permissions.FirstOrDefault(c => c.name == name && c.deleted == false);
 		}
 
 	}

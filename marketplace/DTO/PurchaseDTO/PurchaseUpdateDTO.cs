@@ -19,7 +19,7 @@ namespace marketplace.DTO.PurchaseDTO
 		public int ProductOnSaleid { get; set; }
 
 		[Required]
-		public int PaymentMethodid { get; set; }
+		public string PaymentMethod { get; set; }
 
 
 		public class MapperProfile : Profile

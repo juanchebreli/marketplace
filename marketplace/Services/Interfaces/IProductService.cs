@@ -10,7 +10,7 @@ namespace marketplace.Services.Interfaces
 		Product Add(ProductCreateDTO entity);
 		Product Update(ProductUpdateDTO entity);
 		Product Update(Product entity);
-		List<string> Validations(string productName, int id);
+		void Validate(string productName, int id);
 		void Delete(int id);
 	}
 }

@@ -10,7 +10,7 @@ namespace marketplace.Services.Interfaces
 		ProductOnSale Add(ProductOnSaleCreateDTO entity);
 		ProductOnSale Update(ProductOnSaleUpdateDTO entity);
 		ProductOnSale Update(ProductOnSale entity);
-		List<string> Validations(int id);
+		void Validate(int id);
 		void Delete(int id);
 		Task SendNewOffer(ProductOnSale entity);
 	}

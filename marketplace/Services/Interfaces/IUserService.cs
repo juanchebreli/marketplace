@@ -12,7 +12,7 @@ namespace marketplace.Services.Interfaces
 		User Add(UserCreateDTO entity);
 		User Update(UserUpdateDTO entity);
 		User Update(User entity);
-		List<string> Validations(string email, int id, string username);
+		void Validate(string email, int id, string username);
 		User GetByEmail(string email);
 		void Delete(int id);
 	}

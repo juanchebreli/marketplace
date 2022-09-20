@@ -4,8 +4,8 @@ namespace marketplace.Repositories.Interfaces
 {
 	public interface IPermissionRepository : IGenericRepository<Permission>
 	{
-		public List<Permission> GetAll();
-		public bool FreeName(string name, int id);
+		List<Permission> GetAll();
+		Permission GetByName(string name);
 
 	}
 }

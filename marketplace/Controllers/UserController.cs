@@ -46,17 +46,10 @@ namespace marketplace.Controllers
                 return BadRequest("Invalid data.");
             }
 
-            List<string> errors = _userService.Validations(entity.email, 0, entity.username);
-            if (!errors.Any())
-            {
-                User user = _userService.Add(entity);
-                return Ok(user);
-            }
-            else
-            {
-                var errors_json = JsonConvert.SerializeObject(errors);
-                return StatusCode(500, errors_json);
-            }
+            _userService.Validate(entity.email, 0, entity.username);
+
+            User user = _userService.Add(entity);
+            return Ok(user);
         }
 
 
@@ -69,17 +62,10 @@ namespace marketplace.Controllers
                 return BadRequest("Invalid data.");
             }
 
-            List<string> errors = _userService.Validations(entity.email, entity.id, entity.username);
-            if (!errors.Any())
-            {
-                _userService.Update(entity);
-                return Ok();
-            }
-            else
-            {
-                var errors_json = JsonConvert.SerializeObject(errors);
-                return StatusCode(500, errors_json);
-            }
+            _userService.Validate(entity.email, entity.id, entity.username);
+
+            _userService.Update(entity);
+            return Ok();
         }
 
         [HttpDelete("{id}")]

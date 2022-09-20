@@ -45,17 +45,10 @@ namespace marketplace.Controllers
 				return BadRequest("Invalid data.");
 			}
 
-			List<string> errors = _roleService.Validations(entity.name, 0);
-			if (!errors.Any())
-			{
-				Role role = _roleService.Add(entity);
-				return Ok(role);
-			}
-			else
-			{
-				var errors_json = JsonConvert.SerializeObject(errors);
-				return StatusCode(500, errors_json);
-			}
+			_roleService.Validate(entity.name, 0);
+
+			Role role = _roleService.Add(entity);
+			return Ok(role);
 		}
 
 
@@ -68,17 +61,10 @@ namespace marketplace.Controllers
 				return BadRequest("Invalid data.");
 			}
 
-			List<string> errors = _roleService.Validations(entity.name, entity.id);
-			if (!errors.Any())
-			{
-				_roleService.Update(entity);
-				return Ok();
-			}
-			else
-			{
-				var errors_json = JsonConvert.SerializeObject(errors);
-				return StatusCode(500, errors_json);
-			}
+			_roleService.Validate(entity.name, entity.id);
+
+			_roleService.Update(entity);
+			return Ok();
 		}
 
 		[HttpDelete("{id}")]

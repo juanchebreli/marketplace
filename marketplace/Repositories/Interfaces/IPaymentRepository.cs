@@ -4,6 +4,8 @@ namespace marketplace.Repositories.Interfaces
 {
 	public interface IPaymentRepository : IGenericRepository<PaymentMethod>
 	{
+		List<PaymentMethod> GetAll();
+
 		// CashMethod
 		List<PaymentMethod> GetAllCash();
 		CashMethod AddCashMethod(CashMethod cashMethod);

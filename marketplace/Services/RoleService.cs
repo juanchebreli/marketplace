@@ -2,6 +2,8 @@
 using marketplace.Models;
 using marketplace.Services.Interfaces;
 using marketplace.Repositories.Interfaces;
+using Newtonsoft.Json;
+using marketplace.Helpers.Exceptions.Implements;
 
 namespace marketplace.Services
 {
@@ -44,12 +46,17 @@ namespace marketplace.Services
 		{
 			return _roleRepository.Update(entity);
 		}
-		public List<string> Validations(string roletname, int id)
+		public void Validate(string roletname, int id)
 		{
 			List<string> errors = new List<string>();
-			if (!_roleRepository.FreeName(roletname, id))
+			if (!this.FreeName(roletname, id))
 				errors.Add("That name is already being used by another role");
-			return errors;
+
+			if (errors.Any())
+			{
+				string errosJson = JsonConvert.SerializeObject(errors);
+				throw new BadRequestException(errosJson);
+			}
 		}
 
 
@@ -59,5 +66,17 @@ namespace marketplace.Services
 			role.deleted = true;
 			_roleRepository.Update(role);
 		}
+
+		#region private
+		public bool FreeName(string name, int id)
+		{
+			Role entity = _roleRepository.GetByName(name);
+
+			if (entity != null && entity.id == id)
+				return true;
+			else
+				return (entity == null);
+		}
+		#endregion
 	}
 }
