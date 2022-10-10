@@ -27,14 +27,14 @@ namespace marketplace.Helpers.States
 		}
 
 		public override void DoFree(ProductOnSale entity) {
-			entity.state = (int)StatesEnum.FREE;
+			entity.State = StatesEnum.FREE;
 		}
 
 		public override void DoReserved(ProductOnSale entity){}
 
 		public override void DoSoldOut(ProductOnSale entity)
 		{
-			entity.state = (int)StatesEnum.SOLDOUT;
+			entity.State = StatesEnum.SOLDOUT;
 		}
 	}
 }

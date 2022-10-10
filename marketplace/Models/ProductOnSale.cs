@@ -1,4 +1,5 @@
-﻿using marketplace.Helpers.Factory;
+﻿using marketplace.Helpers.Enums;
+using marketplace.Helpers.Factory;
 using marketplace.Helpers.States;
 using System.ComponentModel.DataAnnotations;
 
@@ -24,11 +25,11 @@ namespace marketplace.Models
 
 		public virtual Purchase Purchase { get; set; }
 
-		public int state { get; set; }
+		public StatesEnum State { get; set; }
 
 		public State GetState()
 		{
-			return StateFactory.GetState(state);
+			return StateFactory.GetState(State);
 		}
 
 

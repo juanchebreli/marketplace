@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using marketplace.Helpers.Enums;
 using marketplace.Models;
 using System.ComponentModel.DataAnnotations;
 
@@ -19,7 +20,7 @@ namespace marketplace.DTO.PurchaseDTO
 		public int ProductOnSaleid { get; set; }
 
 		[Required]
-		public string PaymentMethod { get; set; }
+		public PaymentMethodsEnum PaymentMethod { get; set; }
 
 
 		public class MapperProfile : Profile

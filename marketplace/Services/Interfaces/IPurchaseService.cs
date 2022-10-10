@@ -1,5 +1,6 @@
 ﻿using marketplace.DTO.PaymentMethodDTO;
 using marketplace.DTO.PurchaseDTO;
+using marketplace.Helpers.Enums;
 using marketplace.Models;
 
 namespace marketplace.Services.Interfaces
@@ -11,7 +12,7 @@ namespace marketplace.Services.Interfaces
 		Purchase Add(PurchaseCreateDTO entity);
 		Purchase Update(PurchaseUpdateDTO entity);
 		Purchase Update(Purchase entity);
-		void Validate(int Userid, int ProductOnSaleid, string paymentMethod, int id);
+		void Validate(int Userid, int ProductOnSaleid, PaymentMethodsEnum paymentMethod, int id);
 		void Delete(int id);
 	}
 }

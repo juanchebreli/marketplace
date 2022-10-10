@@ -19,24 +19,21 @@ namespace marketplace.Helpers.Factory
 
         public PaymentMethod CreatePaymentMethod(PaymentMethodCreateDTO entity)
 		{
+			switch (entity.method)
+			{
+				case PaymentMethodsEnum.Cash:
+					CashMethod cashMethod = CustomMapper.Map<PaymentMethodCreateDTO, CashMethod, PaymentMethodCreateDTO.MapperProfileCash>(entity);
+					cashMethod.type = PaymentMethodsEnum.Cash.ToString();
+					return _paymentService.Add(cashMethod);
 
-			// I don't use case becouse id needs to be constant
-			if (PaymentMethodsEnum.Cash.ToString().Equals(entity.method))
-			{
-				CashMethod cashMethod = CustomMapper.Map<PaymentMethodCreateDTO, CashMethod, PaymentMethodCreateDTO.MapperProfileCash>(entity);
-				cashMethod.type = PaymentMethodsEnum.Cash.ToString();
-				return _paymentService.Add(cashMethod);
-			}
-			else
-			{
-				if (PaymentMethodsEnum.Card.ToString().Equals(entity.method))
-				{
+				case PaymentMethodsEnum.Card:
 					CardMethod cardMethod = CustomMapper.Map<PaymentMethodCreateDTO, CardMethod, PaymentMethodCreateDTO.MapperProfileCard>(entity);
 					cardMethod.type = PaymentMethodsEnum.Card.ToString();
 					return _paymentService.Add(cardMethod);
-				}
+
+				default:
+					throw new NotFoundException(new StringBuilder("Not found a payment method: " + entity.method).ToString());
 			}
-			throw new NotFoundException(new StringBuilder("Not found a payment method: " + entity.method).ToString());
 		}
 	}
 }

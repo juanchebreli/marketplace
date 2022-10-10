@@ -6,15 +6,15 @@ namespace marketplace.Helpers.Factory
 {
     public static class StateFactory
     {
-        public static State GetState(int state)
+        public static State GetState(StatesEnum state)
         {
             switch (state)
             {
-                case (int)StatesEnum.FREE:
+                case StatesEnum.FREE:
                     return new Free();
-                case (int)StatesEnum.RESERVED:
+                case StatesEnum.RESERVED:
                    return new Reserved();
-                case (int)StatesEnum.SOLDOUT:
+                case StatesEnum.SOLDOUT:
                     return new SoldOut();
                 default:
                     throw new NotFoundException("State not found");

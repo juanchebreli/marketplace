@@ -81,7 +81,7 @@ namespace marketplace.Services
 			return _purchaseRepository.Update(entity);
 		}
 
-		public void Validate(int Userid, int ProductOnSaleid, string paymentMethod, int id)
+		public void Validate(int Userid, int ProductOnSaleid, PaymentMethodsEnum paymentMethod, int id)
 		{
 			List<string> errors = new List<string>();
 			if (_userService.Get(Userid) == null)
@@ -90,7 +90,7 @@ namespace marketplace.Services
 				errors.Add("Product On Sale dont' exist");
 			if (_purchaseRepository.GetByProductOnSale(ProductOnSaleid) != null)
 				errors.Add("Product On Sale already have a sale");
-			if ((!PaymentMethodsEnum.Cash.ToString().Equals(paymentMethod)) && (!PaymentMethodsEnum.Card.ToString().Equals(paymentMethod)))
+			if ((!PaymentMethodsEnum.Cash.Equals(paymentMethod)) && (!PaymentMethodsEnum.Card.Equals(paymentMethod)))
 				errors.Add("Payment method is invalid");
 
 			if (errors.Any())

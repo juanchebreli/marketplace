@@ -28,7 +28,7 @@ namespace marketplace.DTO.ProductOnSaleDTO
 			{
 				perfil.CreateMap<ProductOnSale, ProductOnSaleCreateDTO>()
 					.ReverseMap()
-					.ForMember(dest => dest.state, opt => opt.MapFrom(src => (int)StatesEnum.FREE))
+					.ForMember(dest => dest.State, opt => opt.MapFrom(src => StatesEnum.FREE))
 					.ForMember(dest => dest.deleted, opt => opt.MapFrom(src => false));
 
 			}

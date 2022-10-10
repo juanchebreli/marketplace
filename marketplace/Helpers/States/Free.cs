@@ -30,12 +30,12 @@ namespace marketplace.Helpers.States
 
 		public override void DoReserved(ProductOnSale entity)
 		{
-			entity.state = (int)StatesEnum.RESERVED;
+			entity.State = StatesEnum.RESERVED;
 		}
 
 		public override void DoSoldOut(ProductOnSale entity)
 		{
-			entity.state = (int)StatesEnum.SOLDOUT;
+			entity.State = StatesEnum.SOLDOUT;
 		}
 	}
 }
