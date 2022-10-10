@@ -5,7 +5,6 @@ namespace marketplace.Helpers.States
 {
 	public abstract class State
 	{
-		public int id { get; set; }
 		public abstract bool canBeShown();
 		public abstract bool canBeFree();
 
@@ -17,5 +16,11 @@ namespace marketplace.Helpers.States
 		public abstract void DoSoldOut(ProductOnSale entity);
 
 		public abstract void DoReserved(ProductOnSale entity);
+
+		public static Free FREE { get; } = new Free();
+
+		public static Reserved RESERVED { get; } = new Reserved();
+
+		public static SoldOut SOLDOUT { get; } = new SoldOut();
 	}
 }

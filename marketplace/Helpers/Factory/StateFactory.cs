@@ -11,11 +11,14 @@ namespace marketplace.Helpers.Factory
             switch (state)
             {
                 case StatesEnum.FREE:
-                    return new Free();
+                    return State.FREE;
+
                 case StatesEnum.RESERVED:
-                   return new Reserved();
+                   return State.RESERVED;
+
                 case StatesEnum.SOLDOUT:
-                    return new SoldOut();
+                    return State.SOLDOUT;
+
                 default:
                     throw new NotFoundException("State not found");
             }
