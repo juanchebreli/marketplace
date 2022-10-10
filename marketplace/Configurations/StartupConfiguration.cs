@@ -2,6 +2,7 @@
 using marketplace.Helpers.Exceptions;
 using marketplace.Helpers.Factory;
 using marketplace.Helpers.Interfaces;
+using marketplace.Helpers.Jwt;
 using marketplace.Repositories;
 using marketplace.Repositories.Interfaces;
 using marketplace.Services;

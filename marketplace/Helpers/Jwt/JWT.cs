@@ -1,4 +1,4 @@
-﻿namespace marketplace.Helpers
+﻿namespace marketplace.Helpers.Jwt
 {
     public class JWT
     {

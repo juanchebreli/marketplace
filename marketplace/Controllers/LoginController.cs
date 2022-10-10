@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using marketplace.Helpers;
 using Newtonsoft.Json.Linq;
 using marketplace.Models;
 using marketplace.DTO.UserDTO;
@@ -9,6 +8,7 @@ using MimeKit;
 using System.Security.Authentication;
 using marketplace.Helpers.Interfaces;
 using marketplace.Services.Interfaces;
+using marketplace.Helpers.Jwt;
 
 namespace marketplace.Controllers
 {

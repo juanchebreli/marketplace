@@ -1,5 +1,4 @@
 using marketplace.Context;
-using marketplace.Helpers;
 using marketplace.Repositories;
 using marketplace.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,6 +10,7 @@ using marketplace.Helpers.Interfaces;
 using marketplace.Services.Interfaces;
 using marketplace.Repositories.Interfaces;
 using marketplace.Configurations;
+using marketplace.Helpers.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 

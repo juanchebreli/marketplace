@@ -5,10 +5,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace marketplace.Helpers
+namespace marketplace.Helpers.Jwt
 {
     public class JwtMiddleware : IJwtMiddleware
-	{
+    {
         public string GenerateJWTToken(UserLoginDTO userInfo, JWT JWT, IConfiguration config)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JWT.SecretKey));
