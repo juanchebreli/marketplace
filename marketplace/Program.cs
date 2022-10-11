@@ -1,16 +1,7 @@
 using marketplace.Context;
-using marketplace.Repositories;
-using marketplace.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using marketplace.WebSocket;
-using marketplace.Helpers.Interfaces;
-using marketplace.Services.Interfaces;
-using marketplace.Repositories.Interfaces;
 using marketplace.Configurations;
-using marketplace.Helpers.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,27 +27,7 @@ builder.Services.AddCors(options =>
 
 // add jwt to service
 var JWTSection = builder.Configuration.GetSection("Jwt");
-builder.Services.Configure<JWT>(JWTSection);
-var JWT = JWTSection.Get<JWT>();
-var key = Encoding.ASCII.GetBytes(JWT.SecretKey);
-
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(x =>
-{
-    x.RequireHttpsMetadata = false;
-    x.SaveToken = true;
-    x.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false
-    };
-});
+builder.Services.AddJWT(JWTSection);
 
 // connect to db
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString: builder.Configuration.GetConnectionString("ConnectionString")));
@@ -69,7 +40,6 @@ builder.Services.AddRepositories();
 
 // configure DI for application helpers
 builder.Services.AddHelpers();
-
 
 //seed
 builder.Services.AddTransient<DataSeeder>();
